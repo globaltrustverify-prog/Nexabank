@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--white);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        /* Transfer Tabs */
+        .transfer-tabs {
+            display: flex;
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        /* Transfer Form */
+        .transfer-form {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--lighter);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .account-balance {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .amount-input-container {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .amount-input {
+            padding-left: 30px !important;
+        }
+
+        .transfer-limits {
+            background: var(--lighter);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        .limit-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .limit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--lighter);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading .loading-spinner {
+            display: block;
+        }
+
+        .loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .success-screen.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--white);
+            font-size: 2rem;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .success-message {
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .transfer-details {
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--lighter);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .transfer-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="dashboard.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <h1><img src="./images/Dark_Blue_and_Gold_Elegant_Banking_Finance_Logo_20251029_025736_0000-removebg-preview (1) (1).png" alt="" height="40px" ></h1>
+            </div>
+            <p>Send Money</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Transfer Type Selection -->
+            <div id="transfer-screen">
+                <h2 class="section-title">Send Money</h2>
+                
+                <div class="transfer-tabs">
+                    <div class="tab active" onclick="switchTransferType('internal')">
+                        Internal Transfer
+                    </div>
+                    <div class="tab" onclick="switchTransferType('external')">
+                        Peer to Peer
+                    </div>
+                </div>
+
+                <!-- Internal Transfer Form -->
+                <div class="transfer-form" id="internal-form">
+                    <div class="form-group">
+                        <label for="from-account">From Account</label>
+                        <select id="from-account" class="form-control" onchange="updateFromAccountBalance()">
+                            <option value="">Select account</option>
+                        </select>
+                        <div class="account-balance" id="from-account-balance"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="to-account">To Account</label>
+                        <select id="to-account" class="form-control">
+                            <option value="">Select account</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <div class="amount-input-container">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="amount" class="form-control amount-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="error-message" id="amount_error">Invalid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description (Optional)</label>
+                        <input type="text" id="description" class="form-control" placeholder="e.g., Monthly savings">
+                    </div>
+
+                    <div class="transfer-limits">
+                        <div class="limit-item">
+                            <span>Minimum transfer:</span>
+                            <span>$1.00</span>
+                        </div>
+                        <div class="limit-item">
+                            <span>Daily limit:</span>
+                            <span>$5,000.00</span>
+                        </div>
+                        <div class="limit-item">
+                            <span>Fee:</span>
+                            <span style="color: var(--success);">Free</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" id="transfer-btn" onclick="processTransfer()">
+                            <span class="btn-text">Transfer Money</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- External Transfer Form -->
+                <div class="transfer-form" id="external-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="external-from-account">From Account</label>
+                        <select id="external-from-account" class="form-control" onchange="updateExternalFromAccountBalance()">
+                            <option value="">Select account</option>
+                        </select>
+                        <div class="account-balance" id="external-from-account-balance"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="to-account-number">To Account Number</label>
+                        <input type="text" id="to-account-number" class="form-control" placeholder="Enter account number">
+                        <div class="error-message" id="account_error">Invalid account number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="external-amount">Amount</label>
+                        <div class="amount-input-container">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="external-amount" class="form-control amount-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="error-message" id="external_amount_error">Invalid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="external-description">Description</label>
+                        <input type="text" id="external-description" class="form-control" placeholder="Required description" required>
+                        <div class="error-message" id="description_error">Description is required</div>
+                    </div>
+
+                    <div class="transfer-limits">
+                        <div class="limit-item">
+                            <span>Minimum transfer:</span>
+                            <span>$1.00</span>
+                        </div>
+                        <div class="limit-item">
+                            <span>Daily limit:</span>
+                            <span>$2,500.00</span>
+                        </div>
+                        <div class="limit-item">
+                            <span>Fee:</span>
+                            <span style="color: var(--success);">Free</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" id="external-transfer-btn" onclick="processExternalTransfer()">
+                            <span class="btn-text">Send Money</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="success-screen">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 class="success-title">Transfer Successful!</h3>
+                <p class="success-message">
+                    Your money has been sent successfully. The recipient should see the funds in their account shortly.
+                </p>
+                
+                <div class="transfer-details" id="transfer-details">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="goToDashboard()">
+                        Go to Dashboard
+                    </button>
+                    <button class="btn btn-secondary" onclick="sendAnotherTransfer()">
+                        Send Another Transfer
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </a>
+            <a href="accounts.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Accounts</div>
+            </a>
+            <a href="transfer.html" class="nav-item active">
+                <div class="nav-icon">🔄</div>
+                <div class="nav-label">Transfer</div>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Profile</div>
+            </a>
+        </nav>
+    </div>
+
+<script>
+    const API_BASE = 'http://localhost:5000/api';
+    let userAccounts = [];
+    let currentTransferType = 'internal';
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        loadUserAccounts();
+        setupEventListeners();
+    });
+
+    async function loadUserAccounts() {
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const response = await fetch(`${API_BASE}/accounts`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                userAccounts = data.accounts || [];
+                populateAccountDropdowns();
+            } else {
+                throw new Error('Failed to load accounts');
+            }
+        } catch (error) {
+            console.error('Error loading accounts:', error);
+            alert('Failed to load accounts. Please try again.');
+        }
+    }
+
+    function populateAccountDropdowns() {
+        const fromAccount = document.getElementById('from-account');
+        const toAccount = document.getElementById('to-account');
+        const externalFromAccount = document.getElementById('external-from-account');
+
+        // Clear existing options
+        fromAccount.innerHTML = '<option value="">Select account</option>';
+        toAccount.innerHTML = '<option value="">Select account</option>';
+        externalFromAccount.innerHTML = '<option value="">Select account</option>';
+
+        userAccounts.forEach(account => {
+            const option = `<option value="${account.account_number}" data-balance="${account.balance}">
+                ${account.account_type === 'checking' ? 'Checking' : 'Savings'} - ****${account.account_number.slice(-4)}
+            </option>`;
+            
+            fromAccount.innerHTML += option;
+            toAccount.innerHTML += option;
+            externalFromAccount.innerHTML += option;
+        });
+    }
+
+    function setupEventListeners() {
+        // Amount validation
+        document.getElementById('amount').addEventListener('input', validateAmount);
+        document.getElementById('external-amount').addEventListener('input', validateExternalAmount);
+        
+        // Account number validation
+        document.getElementById('to-account-number').addEventListener('input', validateAccountNumber);
+        
+        // Description validation
+        document.getElementById('external-description').addEventListener('input', validateDescription);
+    }
+
+    function switchTransferType(type) {
+        currentTransferType = type;
+        
+        // Update tabs
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // Show/hide forms
+        if (type === 'internal') {
+            document.getElementById('internal-form').style.display = 'block';
+            document.getElementById('external-form').style.display = 'none';
+        } else {
+            document.getElementById('internal-form').style.display = 'none';
+            document.getElementById('external-form').style.display = 'block';
+        }
+    }
+
+    function updateFromAccountBalance() {
+        const fromAccount = document.getElementById('from-account');
+        const selectedOption = fromAccount.options[fromAccount.selectedIndex];
+        const balance = selectedOption.getAttribute('data-balance') || '0.00';
+        
+        document.getElementById('from-account-balance').textContent = `Balance: $${parseFloat(balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+
+    function updateExternalFromAccountBalance() {
+        const fromAccount = document.getElementById('external-from-account');
+        const selectedOption = fromAccount.options[fromAccount.selectedIndex];
+        const balance = selectedOption.getAttribute('data-balance') || '0.00';
+        
+        document.getElementById('external-from-account-balance').textContent = `Balance: $${parseFloat(balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+
+    function validateAmount() {
+        const amount = parseFloat(document.getElementById('amount').value);
+        const fromAccount = document.getElementById('from-account');
+        const selectedOption = fromAccount.options[fromAccount.selectedIndex];
+        const balance = parseFloat(selectedOption.getAttribute('data-balance') || 0);
+        
+        hideError('amount_error');
+
+        if (isNaN(amount) || amount <= 0) {
+            showError('amount_error', 'Please enter a valid amount');
+            return false;
+        }
+
+        if (amount < 1.00) {
+            showError('amount_error', 'Minimum transfer amount is $1.00');
+            return false;
+        }
+
+        if (amount > 5000) {
+            showError('amount_error', 'Maximum transfer amount is $5,000.00');
+            return false;
+        }
+
+        if (amount > balance) {
+            showError('amount_error', 'Insufficient funds');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateExternalAmount() {
+        const amount = parseFloat(document.getElementById('external-amount').value);
+        const fromAccount = document.getElementById('external-from-account');
+        const selectedOption = fromAccount.options[fromAccount.selectedIndex];
+        const balance = parseFloat(selectedOption.getAttribute('data-balance') || 0);
+        
+        hideError('external_amount_error');
+
+        if (isNaN(amount) || amount <= 0) {
+            showError('external_amount_error', 'Please enter a valid amount');
+            return false;
+        }
+
+        if (amount < 1.00) {
+            showError('external_amount_error', 'Minimum transfer amount is $1.00');
+            return false;
+        }
+
+        if (amount > 2500) {
+            showError('external_amount_error', 'Maximum transfer amount is $2,500.00');
+            return false;
+        }
+
+        if (amount > balance) {
+            showError('external_amount_error', 'Insufficient funds');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateAccountNumber() {
+        const accountNumber = document.getElementById('to-account-number').value.trim();
+        hideError('account_error');
+
+        if (!accountNumber) {
+            showError('account_error', 'Account number is required');
+            return false;
+        }
+
+        // Basic validation for NexaBank account format
+        const formattedAccount = accountNumber.toUpperCase();
+        if (!/^NB[C|S]\d+$/.test(formattedAccount)) {
+            showError('account_error', 'Please enter a valid NexaBank account number (e.g., NBC123456 or NBS123456)');
+            return false;
+        }
+
+        if (formattedAccount.length < 8) {
+            showError('account_error', 'Please enter a valid account number');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateDescription() {
+        const description = document.getElementById('external-description').value.trim();
+        hideError('description_error');
+
+        if (!description) {
+            showError('description_error', 'Description is required for external transfers');
+            return false;
+        }
+
+        return true;
+    }
+
+    function formatAccountNumber(accountNumber) {
+        // Remove any spaces and convert to uppercase
+        return accountNumber.replace(/\s/g, '').toUpperCase();
+    }
+
+    async function processTransfer() {
+        if (!validateInternalTransfer()) return;
+
+        const transferBtn = document.getElementById('transfer-btn');
+        transferBtn.classList.add('loading');
+        transferBtn.disabled = true;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const fromAccount = document.getElementById('from-account').value;
+            const toAccount = document.getElementById('to-account').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const description = document.getElementById('description').value || 'Internal transfer';
+
+            if (fromAccount === toAccount) {
+                throw new Error('Cannot transfer to the same account');
+            }
+
+            const transferData = {
+                from_account: formatAccountNumber(fromAccount),
+                to_account: formatAccountNumber(toAccount),
+                amount: amount,
+                description: description
+            };
+
+            console.log('Processing internal transfer:', transferData);
+
+            // FIXED: Use /api/transfer instead of /api/internal-transfer
+            const response = await fetch(`${API_BASE}/transfer`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(transferData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showSuccessScreen(data, 'internal');
+            } else {
+                throw new Error(data.error || 'Transfer failed');
+            }
+
+        } catch (error) {
+            console.error('Transfer error:', error);
+            alert('Transfer failed: ' + error.message);
+        } finally {
+            transferBtn.classList.remove('loading');
+            transferBtn.disabled = false;
+        }
+    }
+
+    async function processExternalTransfer() {
+        if (!validateExternalTransfer()) return;
+
+        const transferBtn = document.getElementById('external-transfer-btn');
+        transferBtn.classList.add('loading');
+        transferBtn.disabled = true;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const fromAccount = document.getElementById('external-from-account').value;
+            const toAccount = document.getElementById('to-account-number').value;
+            const amount = parseFloat(document.getElementById('external-amount').value);
+            const description = document.getElementById('external-description').value;
+
+            const transferData = {
+                from_account: formatAccountNumber(fromAccount),
+                to_account: formatAccountNumber(toAccount),
+                amount: amount,
+                description: description
+            };
+
+            console.log('Processing external transfer:', transferData);
+
+            const response = await fetch(`${API_BASE}/transfer`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(transferData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showSuccessScreen(data, 'external');
+            } else {
+                throw new Error(data.error || 'Transfer failed');
+            }
+
+        } catch (error) {
+            console.error('Transfer error:', error);
+            alert('Transfer failed: ' + error.message);
+        } finally {
+            transferBtn.classList.remove('loading');
+            transferBtn.disabled = false;
+        }
+    }
+
+    function validateInternalTransfer() {
+        const fromAccount = document.getElementById('from-account').value;
+        const toAccount = document.getElementById('to-account').value;
+        const amountValid = validateAmount();
+
+        if (!fromAccount) {
+            alert('Please select a source account');
+            return false;
+        }
+
+        if (!toAccount) {
+            alert('Please select a destination account');
+            return false;
+        }
+
+        if (fromAccount === toAccount) {
+            alert('Cannot transfer to the same account');
+            return false;
+        }
+
+        return amountValid;
+    }
+
+    function validateExternalTransfer() {
+        const fromAccount = document.getElementById('external-from-account').value;
+        const amountValid = validateExternalAmount();
+        const accountValid = validateAccountNumber();
+        const descriptionValid = validateDescription();
+
+        if (!fromAccount) {
+            alert('Please select a source account');
+            return false;
+        }
+
+        return amountValid && accountValid && descriptionValid;
+    }
+
+    function showSuccessScreen(data, type) {
+        const transferScreen = document.getElementById('transfer-screen');
+        const successScreen = document.getElementById('success-screen');
+        const transferDetails = document.getElementById('transfer-details');
+
+        transferScreen.style.display = 'none';
+        successScreen.classList.add('active');
+
+        const fromAccount = type === 'internal' ? 
+            document.getElementById('from-account').value : 
+            document.getElementById('external-from-account').value;
+        
+        const toAccount = type === 'internal' ?
+            document.getElementById('to-account').value :
+            document.getElementById('to-account-number').value;
+        
+        const amount = type === 'internal' ?
+            document.getElementById('amount').value :
+            document.getElementById('external-amount').value;
+
+        transferDetails.innerHTML = `
+            <div class="detail-item">
+                <span class="detail-label">From Account:</span>
+                <span class="detail-value">****${fromAccount.slice(-4)}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">To Account:</span>
+                <span class="detail-value">${type === 'internal' ? '****' + toAccount.slice(-4) : toAccount}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Amount:</span>
+                <span class="detail-value">$${parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Reference:</span>
+                <span class="detail-value">${data.transaction_id || data.transfer_details?.transaction_id || 'N/A'}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Status:</span>
+                <span class="detail-value" style="color: var(--success);">Completed</span>
+            </div>
+        `;
+    }
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function goToDashboard() {
+        window.location.href = 'dashboard.html';
+    }
+
+    function sendAnotherTransfer() {
+        // Reset forms
+        document.getElementById('transfer-screen').style.display = 'block';
+        document.getElementById('success-screen').classList.remove('active');
+        
+        // Clear form fields
+        document.getElementById('from-account').selectedIndex = 0;
+        document.getElementById('to-account').selectedIndex = 0;
+        document.getElementById('amount').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('external-from-account').selectedIndex = 0;
+        document.getElementById('to-account-number').value = '';
+        document.getElementById('external-amount').value = '';
+        document.getElementById('external-description').value = '';
+        
+        // Reset balances
+        document.getElementById('from-account-balance').textContent = '';
+        document.getElementById('external-from-account-balance').textContent = '';
+        
+        // Hide errors
+        hideAllErrors();
+    }
+
+    function showError(errorId, message) {
+        const errorElement = document.getElementById(errorId);
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+    }
+
+    function hideError(errorId) {
+        const errorElement = document.getElementById(errorId);
+        errorElement.classList.remove('show');
+    }
+
+    function hideAllErrors() {
+        document.querySelectorAll('.error-message').forEach(error => {
+            error.classList.remove('show');
+        });
+    }
+</script>
+
+    </body>
+    </html>

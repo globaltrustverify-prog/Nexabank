@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .register-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .register-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px 0;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 30px;
+            right: 30px;
+            height: 3px;
+            background: var(--lighter);
+            z-index: 1;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 30px;
+            width: 0%;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            z-index: 2;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--lighter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary);
+        }
+
+        .progress-step.completed .step-number {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--lighter);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--lighter);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading .loading-spinner {
+            display: block;
+        }
+
+        .loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .terms-group {
+            margin-top: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input {
+            margin-top: 2px;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--dark);
+        }
+
+        .checkbox-group a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .success-step {
+            text-align: center;
+            padding: 40px 30px;
+            display: none;
+        }
+
+        .success-step.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--white);
+            font-size: 2rem;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--lighter);
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: var(--error); width: 33%; }
+        .strength-medium { background: var(--accent); width: 66%; }
+        .strength-strong { background: var(--success); width: 100%; }
+
+        .password-requirements {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                border-radius: 12px;
+            }
+            
+            .register-header {
+                padding: 25px 20px;
+            }
+            
+            .form-container {
+                padding: 25px 20px;
+            }
+            
+            .progress-bar {
+                padding: 15px 20px 0;
+            }
+            
+            .progress-bar::before,
+            .progress-bar::after {
+                left: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo">
+                <h1><img src="./images/Dark_Blue_and_Gold_Elegant_Banking_Finance_Logo_20251029_025736_0000-removebg-preview (1) (1).png" alt="" height="40px" ></h1>
+            </div>
+            <p>Create your investment banking account</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Personal</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Security</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Terms</div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" id="step-1">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" class="form-control" placeholder="Enter your full name">
+                    <div class="error-message" id="full_name_error">Please enter your full name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                    <div class="error-message" id="email_error">Please enter a valid email address</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number">
+                    <div class="error-message" id="phone_error">Please enter a valid phone number</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" id="date_of_birth" class="form-control">
+                    <div class="error-message" id="date_of_birth_error">You must be at least 18 years old</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" class="form-control" rows="3" placeholder="Enter your full address"></textarea>
+                    <div class="error-message" id="address_error">Please enter your address</div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Security -->
+            <div class="form-step" id="step-2">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Create a password" oninput="checkPasswordStrength()">
+                    <div class="password-strength">
+                        <div class="strength-bar" id="password-strength-bar"></div>
+                    </div>
+                    <div class="password-requirements">Must be at least 6 characters</div>
+                    <div class="error-message" id="password_error">Password must be at least 6 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" class="form-control" placeholder="Confirm your password" oninput="checkPasswordMatch()">
+                    <div class="error-message" id="confirm_password_error">Passwords do not match</div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Terms -->
+            <div class="form-step" id="step-3">
+                <div class="terms-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="communications">
+                        <label for="communications">
+                            I'd like to receive updates about my account and investment opportunities
+                        </label>
+                    </div>
+                    <div class="error-message" id="terms_error">You must accept the Terms of Service</div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" id="register-btn" onclick="registerUser()">
+                        <span class="btn-text">Create Account</span>
+                        <div class="loading-spinner"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Step -->
+            <div class="success-step" id="success-step">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3>Account Created Successfully!</h3>
+                <p>Your NexaBank account has been created. You can now access all our banking and investment features.</p>
+                <div class="form-actions">
+                    <a href='login.html' class="btn btn-primary" >
+                        Continue to Login
+                    </a>
+                </div>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+const totalSteps = 3;
+
+function updateProgressBar() {
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+        const stepNumber = index + 1;
+        if (stepNumber < currentStep) {
+            step.classList.add('completed');
+            step.classList.remove('active');
+        } else if (stepNumber === currentStep) {
+            step.classList.add('active');
+            step.classList.remove('completed');
+        } else {
+            step.classList.remove('active', 'completed');
+        }
+    });
+
+    // Update progress line
+    const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+    document.querySelector('.progress-bar').style.setProperty('--progress-width', `${progress}%`);
+}
+
+// Add CSS variable for progress width
+document.documentElement.style.setProperty('--progress-width', '0%');
+
+function showStep(step) {
+    document.querySelectorAll('.form-step').forEach(formStep => {
+        formStep.classList.remove('active');
+    });
+    document.getElementById(`step-${step}`).classList.add('active');
+}
+
+function nextStep() {
+    if (validateStep(currentStep)) {
+        if (currentStep < totalSteps) {
+            currentStep++;
+            updateProgressBar();
+            showStep(currentStep);
+        }
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        updateProgressBar();
+        showStep(currentStep);
+    }
+}
+
+function validateStep(step) {
+    let isValid = true;
+    hideAllErrors();
+
+    switch(step) {
+        case 1:
+            if (!document.getElementById('full_name').value.trim()) {
+                showError('full_name_error', 'Please enter your full name');
+                isValid = false;
+            }
+            
+            const email = document.getElementById('email').value;
+            if (!email || !validateEmail(email)) {
+                showError('email_error', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            if (!document.getElementById('phone').value.trim()) {
+                showError('phone_error', 'Please enter your phone number');
+                isValid = false;
+            }
+            
+            const dob = document.getElementById('date_of_birth').value;
+            if (!dob || !validateAge(dob)) {
+                showError('date_of_birth_error', 'You must be at least 18 years old');
+                isValid = false;
+            }
+            
+            if (!document.getElementById('address').value.trim()) {
+                showError('address_error', 'Please enter your address');
+                isValid = false;
+            }
+            break;
+            
+        case 2:
+            const password = document.getElementById('password').value;
+            if (!password || password.length < 6) {
+                showError('password_error', 'Password must be at least 6 characters');
+                isValid = false;
+            }
+            
+            const confirmPassword = document.getElementById('confirm_password').value;
+            if (password !== confirmPassword) {
+                showError('confirm_password_error', 'Passwords do not match');
+                isValid = false;
+            }
+            break;
+            
+        case 3:
+            if (!document.getElementById('terms').checked) {
+                showError('terms_error', 'You must accept the Terms of Service');
+                isValid = false;
+            }
+            break;
+    }
+    
+    return isValid;
+}
+
+function checkPasswordStrength() {
+    const password = document.getElementById('password').value;
+    const strengthBar = document.getElementById('password-strength-bar');
+    
+    if (password.length === 0) {
+        strengthBar.className = 'strength-bar';
+        strengthBar.style.width = '0%';
+        return;
+    }
+    
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    
+    if (strength <= 2) {
+        strengthBar.className = 'strength-bar strength-weak';
+    } else if (strength <= 4) {
+        strengthBar.className = 'strength-bar strength-medium';
+    } else {
+        strengthBar.className = 'strength-bar strength-strong';
+    }
+}
+
+function checkPasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const errorElement = document.getElementById('confirm_password_error');
+    
+    if (confirmPassword && password !== confirmPassword) {
+        errorElement.textContent = 'Passwords do not match';
+        errorElement.classList.add('show');
+        document.getElementById('confirm_password').classList.add('error');
+    } else {
+        errorElement.classList.remove('show');
+        document.getElementById('confirm_password').classList.remove('error');
+    }
+}
+
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+function validateAge(dob) {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    
+    return age >= 18;
+}
+
+function showError(errorId, message) {
+    const errorElement = document.getElementById(errorId);
+    errorElement.textContent = message;
+    errorElement.classList.add('show');
+    
+    const inputId = errorId.replace('_error', '');
+    const inputElement = document.getElementById(inputId);
+    if (inputElement) {
+        inputElement.classList.add('error');
+    }
+}
+
+function hideAllErrors() {
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.classList.remove('show');
+    });
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.classList.remove('error');
+    });
+}
+
+async function registerUser() {
+    if (!validateStep(3)) return;
+
+    const registerBtn = document.getElementById('register-btn');
+    registerBtn.classList.add('loading');
+    registerBtn.disabled = true;
+
+    // Format date to YYYY-MM-DD for backend
+    const dobInput = document.getElementById('date_of_birth').value;
+    const formattedDob = formatDateForBackend(dobInput);
+
+    const userData = {
+        full_name: document.getElementById('full_name').value.trim(),
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value.trim(),
+        date_of_birth: formattedDob,
+        address: document.getElementById('address').value.trim(),
+        password: document.getElementById('password').value
+    };
+
+    console.log('Sending registration data:', userData);
+
+    try {
+        const response = await fetch('http://localhost:5000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        });
+
+        console.log('Response status:', response.status);
+        
+        const data = await response.json();
+        console.log('Response data:', data);
+
+        if (response.ok) {
+            // Registration successful
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById('success-step').classList.add('active');
+        } else {
+            // Registration failed - show specific error from backend
+            const errorMessage = data.error || `Registration failed (Status: ${response.status})`;
+            showRegistrationError(errorMessage);
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        showRegistrationError('Cannot connect to server. Please check if the backend is running on localhost:5000');
+    } finally {
+        registerBtn.classList.remove('loading');
+        registerBtn.disabled = false;
+    }
+}
+
+function formatDateForBackend(dateString) {
+    // Convert from YYYY-MM-DD (HTML date input format) to YYYY-MM-DD
+    // This ensures consistent date format for backend
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function showRegistrationError(message) {
+    // Create or show error message display
+    let errorDisplay = document.getElementById('registration-error');
+    if (!errorDisplay) {
+        errorDisplay = document.createElement('div');
+        errorDisplay.id = 'registration-error';
+        errorDisplay.style.cssText = `
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        `;
+        const formContainer = document.querySelector('.form-container');
+        formContainer.insertBefore(errorDisplay, formContainer.firstChild);
+    }
+    
+    errorDisplay.innerHTML = `
+        <strong>Registration Error:</strong> ${message}
+        <br><small>Make sure your backend is running on http://localhost:5000</small>
+    `;
+    errorDisplay.style.display = 'block';
+    
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+        errorDisplay.style.display = 'none';
+    }, 10000);
+}
+
+function redirectToLogin() {
+    window.location.href = 'login.html';
+}
+
+// Initialize date picker max date (18 years ago)
+const today = new Date();
+const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+document.getElementById('date_of_birth').max = maxDate.toISOString().split('T')[0];
+
+// Update progress bar CSS
+const style = document.createElement('style');
+style.textContent = `
+    .progress-bar::after {
+        width: var(--progress-width, 0%);
+    }
+`;
+document.head.appendChild(style);
+
+// Add event listeners for better UX
+document.addEventListener('DOMContentLoaded', function() {
+    // Enter key to move to next step
+    document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const activeStep = document.querySelector('.form-step.active');
+            if (activeStep.id === 'step-3') {
+                registerUser();
+            } else {
+                nextStep();
+            }
+        }
+    });
+    
+    // Real-time email validation
+    document.getElementById('email').addEventListener('blur', function() {
+        const email = this.value;
+        if (email && !validateEmail(email)) {
+            showError('email_error', 'Please enter a valid email address');
+        }
+    });
+});
+    </script>
+</body>
+</html>

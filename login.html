@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .login-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 40px 30px 30px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .login-form {
+            padding: 40px 30px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--lighter);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .login-actions {
+            margin-top: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading .loading-spinner {
+            display: block;
+        }
+
+        .loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-links {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .register-link {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 5px;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .demo-accounts {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--lighter);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .demo-accounts h4 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .demo-account {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: var(--gray);
+        }
+
+        .demo-account:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                border-radius: 12px;
+            }
+            
+            .login-header {
+                padding: 30px 20px 25px;
+            }
+            
+            .login-form {
+                padding: 30px 20px 25px;
+            }
+            
+            .demo-accounts {
+                margin: 20px 0;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">
+                <h1><img src="./images/Dark_Blue_and_Gold_Elegant_Banking_Finance_Logo_20251029_025736_0000-removebg-preview (1) (1).png" alt="" height="40px" ></h1>
+            </div>
+            <p>Welcome back to your investment banking</p>
+        </div>
+
+        <div class="login-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                <div class="error-message" id="email_error">Please enter a valid email address</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                <div class="error-message" id="password_error">Please enter your password</div>
+            </div>
+
+            <div class="login-actions">
+                <button class="btn btn-primary" id="login-btn" onclick="loginUser()">
+                    <span class="btn-text">Sign In to Your Account</span>
+                    <div class="loading-spinner"></div>
+                </button>
+            </div>
+
+            <div class="login-links">
+                <div class="forgot-password">
+                    <a href="#">Forgot your password?</a>
+                </div>
+                <div class="register-link">
+                    Don't have an account?
+                    <a href="register.html">Create account</a>
+                </div>
+            </div>
+
+           
+<script>
+    function validateForm() {
+        let isValid = true;
+        hideAllErrors();
+
+        const email = document.getElementById('email').value;
+        if (!email || !validateEmail(email)) {
+            showError('email_error', 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        const password = document.getElementById('password').value;
+        if (!password) {
+            showError('password_error', 'Please enter your password');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    async function loginUser() {
+        if (!validateForm()) return;
+
+        const loginBtn = document.getElementById('login-btn');
+        loginBtn.classList.add('loading');
+        loginBtn.disabled = true;
+
+        const loginData = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
+
+        console.log('Sending login data:', { email: loginData.email, password: '***' });
+
+        try {
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData)
+            });
+
+            console.log('Response status:', response.status);
+            
+            const data = await response.json();
+            console.log('Response data:', data);
+
+            if (response.ok) {
+                // Login successful
+                handleLoginSuccess(data);
+            } else {
+                // Login failed
+                const errorMessage = data.error || `Login failed (Status: ${response.status})`;
+                showLoginError(errorMessage);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            showLoginError('Cannot connect to server. Please check if the backend is running on localhost:5000');
+        } finally {
+            loginBtn.classList.remove('loading');
+            loginBtn.disabled = false;
+        }
+    }
+
+    function handleLoginSuccess(data) {
+        // Store the token in localStorage
+        if (data.token) {
+            localStorage.setItem('nexabank_token', data.token);
+            localStorage.setItem('nexabank_user', JSON.stringify(data.user));
+        }
+
+        // Check if user is admin and set appropriate message
+        const isAdmin = data.user && data.user.is_admin;
+        const redirectMessage = isAdmin 
+            ? 'Login successful! Redirecting to admin dashboard...' 
+            : 'Login successful! Redirecting to dashboard...';
+
+        // Show success message
+        showLoginSuccess(redirectMessage);
+
+        // Redirect after 1.5 seconds
+        setTimeout(() => {
+            if (isAdmin) {
+                console.log('Admin user detected, redirecting to admin dashboard');
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                console.log('Regular user, redirecting to user dashboard');
+                window.location.href = 'dashboard.html';
+            }
+        }, 1500);
+    }
+
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function showError(errorId, message) {
+        const errorElement = document.getElementById(errorId);
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+        
+        const inputId = errorId.replace('_error', '');
+        const inputElement = document.getElementById(inputId);
+        if (inputElement) {
+            inputElement.classList.add('error');
+        }
+    }
+
+    function hideAllErrors() {
+        document.querySelectorAll('.error-message').forEach(error => {
+            error.classList.remove('show');
+        });
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.classList.remove('error');
+        });
+    }
+
+    function showLoginError(message) {
+        // Create or show error message display
+        let errorDisplay = document.getElementById('login-error');
+        if (!errorDisplay) {
+            errorDisplay = document.createElement('div');
+            errorDisplay.id = 'login-error';
+            errorDisplay.style.cssText = `
+                background: #fee2e2;
+                border: 1px solid #fecaca;
+                color: #dc2626;
+                padding: 12px 16px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-size: 0.9rem;
+            `;
+            const loginForm = document.querySelector('.login-form');
+            loginForm.insertBefore(errorDisplay, loginForm.firstChild);
+        }
+        
+        errorDisplay.innerHTML = `
+            <strong>Login Error:</strong> ${message}
+        `;
+        errorDisplay.style.display = 'block';
+    }
+
+    function showLoginSuccess(message) {
+        // Create or show success message display
+        let successDisplay = document.getElementById('login-success');
+        if (!successDisplay) {
+            successDisplay = document.createElement('div');
+            successDisplay.id = 'login-success';
+            successDisplay.style.cssText = `
+                background: #d1fae5;
+                border: 1px solid #a7f3d0;
+                color: #059669;
+                padding: 12px 16px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-size: 0.9rem;
+            `;
+            const loginForm = document.querySelector('.login-form');
+            loginForm.insertBefore(successDisplay, loginForm.firstChild);
+        }
+        
+        successDisplay.innerHTML = `
+            <strong>Success:</strong> ${message}
+        `;
+        successDisplay.style.display = 'block';
+    }
+
+    // Add event listeners for better UX
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enter key to submit login
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginUser();
+            }
+        });
+        
+        // Real-time email validation
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value;
+            if (email && !validateEmail(email)) {
+                showError('email_error', 'Please enter a valid email address');
+            }
+        });
+
+    
+        
+    });
+</script>
+</body>
+</html>

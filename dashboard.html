@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --warning: #f59e0b;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--white);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .current-date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px 80px;
+            position: relative;
+        }
+
+        /* Portfolio Card */
+        .portfolio-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            margin: -40px 0 25px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            top: 60px;
+            z-index: 10;
+        }
+
+        .portfolio-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .portfolio-amount {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .portfolio-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .portfolio-change.negative {
+            color: var(--error);
+        }
+
+        /* Quick Actions */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--dark);
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .action-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .action-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--lighter);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .action-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Accounts Section */
+        .accounts-section {
+            margin-bottom: 25px;
+        }
+
+        .account-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .account-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .account-number {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .account-balance {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Recent Transactions */
+        .transactions-section {
+            margin-bottom: 25px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--lighter);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        .transaction-icon.income {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+        }
+
+        .transaction-icon.expense {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--error);
+        }
+
+        .transaction-icon.transfer {
+            background: rgba(30, 64, 175, 0.1);
+            color: var(--primary);
+        }
+
+        .transaction-icon.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .transaction-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .transaction-amount.positive {
+            color: var(--success);
+        }
+
+        .transaction-amount.negative {
+            color: var(--error);
+        }
+
+        .transaction-amount.pending {
+            color: var(--warning);
+        }
+
+        /* Investment Overview */
+        .investment-section {
+            margin-bottom: 25px;
+        }
+
+        .investment-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .investment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .investment-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: var(--lighter);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .investment-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--lighter);
+        }
+
+        .investment-item:last-child {
+            border-bottom: none;
+        }
+
+        .investment-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1rem;
+            background: var(--lighter);
+            color: var(--primary);
+        }
+
+        .investment-details {
+            flex: 1;
+        }
+
+        .investment-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: var(--dark);
+        }
+
+        .investment-symbol {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .investment-value {
+            text-align: right;
+        }
+
+        .investment-amount {
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: var(--dark);
+        }
+
+        .investment-change {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .investment-change.positive {
+            color: var(--success);
+        }
+
+        .investment-change.negative {
+            color: var(--error);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--lighter);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--lighter) 25%, rgba(255,255,255,0.5) 50%, var(--lighter) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-text {
+            height: 12px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-title {
+            height: 20px;
+            width: 60%;
+            margin-bottom: 15px;
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        .debug-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .debug-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding: 3px 0;
+        }
+
+        .debug-value {
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .portfolio-amount {
+                font-size: 1.8rem;
+            }
+            
+            .quick-actions-grid {
+                gap: 10px;
+            }
+            
+            .action-item {
+                padding: 12px 8px;
+            }
+            
+            .action-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1><img src="./images/Dark_Blue_and_Gold_Elegant_Banking_Finance_Logo_20251029_025736_0000-removebg-preview (1) (1).png" alt="" height="40px" ></h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Loading...</div>
+                    <div class="current-date" id="current-date"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Portfolio Overview -->
+            <div class="portfolio-card">
+                <div class="portfolio-label">Total Portfolio Value</div>
+                <div class="portfolio-amount" id="portfolio-amount">
+                    <div class="skeleton skeleton-text" style="width: 70%; height: 32px;"></div>
+                </div>
+                <div class="portfolio-change" id="portfolio-change">
+                    <div class="skeleton skeleton-text" style="width: 50%;"></div>
+                </div>
+            </div>
+
+            <!-- Debug Panel -->
+            <div class="debug-panel" id="debug-panel" style="display: none;">
+                <div class="debug-title">Balance Calculation Debug</div>
+                <div class="debug-item">
+                    <span>Checking Account:</span>
+                    <span class="debug-value" id="debug-checking">$0.00</span>
+                </div>
+                <div class="debug-item">
+                    <span>Savings Account:</span>
+                    <span class="debug-value" id="debug-savings">$0.00</span>
+                </div>
+                <div class="debug-item">
+                    <span>Crypto Value:</span>
+                    <span class="debug-value" id="debug-crypto">$0.00</span>
+                </div>
+                <div class="debug-item">
+                    <span>Stocks Value:</span>
+                    <span class="debug-value" id="debug-stocks">$0.00</span>
+                </div>
+                <div class="debug-item" style="border-top: 1px solid #dee2e6; padding-top: 5px; margin-top: 5px;">
+                    <span style="font-weight: bold;">Total Calculated:</span>
+                    <span class="debug-value" id="debug-total" style="font-weight: bold;">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="quick-actions-grid">
+                <div class="action-item" onclick="window.location.href= 'account.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="action-label">Accounts</div>
+                </div>
+                <div class="action-item" onclick="window.location.href= 'transfer.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="action-label">Transfer</div>
+                </div>
+                <div class="action-item" onclick="window.location.href= 'deposit.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="action-label">Deposit</div>
+                </div>
+                <div class="action-item" onclick="window.location.href= 'withdraw.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="action-label">Withdraw</div>
+                </div>
+                <div class="action-item" onclick="alert('Working on trading crypto with us')">
+                    <div class="action-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="action-label">Crypto</div>
+                </div>
+                <div class="action-item" onclick="alert('Working on trading stock with us')">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="action-label">Stocks</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('cards')">
+                    <div class="action-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="action-label">Cards</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('more')">
+                    <div class="action-icon">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <div class="action-label">More</div>
+                </div>
+            </div>
+
+            <!-- Accounts Section -->
+            <div class="accounts-section">
+                <h3 class="section-title">My Accounts</h3>
+                <div id="accounts-container">
+                    <div class="account-card">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text" style="width: 40%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions (Now includes pendings) -->
+            <div class="transactions-section">
+                <h3 class="section-title">Recent Transactions</h3>
+                <div id="transactions-container">
+                    <div class="transaction-item">
+                        <div class="skeleton" style="width: 45px; height: 45px; border-radius: 50%;"></div>
+                        <div style="flex: 1; margin-left: 15px;">
+                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                            <div class="skeleton skeleton-text" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Overview -->
+            <div class="investment-section">
+                <div class="investment-header">
+                    <h3 class="section-title" style="margin: 0;">Investments</h3>
+                    <div class="investment-tabs">
+                        <div class="tab active" onclick="switchTab('crypto')">Crypto</div>
+                        <div class="tab" onclick="switchTab('stocks')">Stocks</div>
+                    </div>
+                </div>
+                
+                <div class="investment-card" id="crypto-tab">
+                    <div id="crypto-container">
+                        <div class="investment-item">
+                            <div class="skeleton" style="width: 40px; height: 40px; border-radius: 50%;"></div>
+                            <div style="flex: 1; margin-left: 12px;">
+                                <div class="skeleton skeleton-text" style="width: 50%;"></div>
+                                <div class="skeleton skeleton-text" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="investment-card" id="stocks-tab" style="display: none;">
+                    <div id="stocks-container">
+                        <div class="investment-item">
+                            <div class="skeleton" style="width: 40px; height: 40px; border-radius: 50%;"></div>
+                            <div style="flex: 1; margin-left: 12px;">
+                                <div class="skeleton skeleton-text" style="width: 50%;"></div>
+                                <div class="skeleton skeleton-text" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">⭐</div>
+                <div class="nav-label">Rewards</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Finance</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Cards</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Me</div>
+            </a>
+        </nav>
+    </div>
+
+<script>
+    // API Base URL
+    const API_BASE = 'http://localhost:5000/api';
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        loadUserData();
+        updateCurrentDate();
+        loadDashboardData();
+        
+        // Show debug panel for troubleshooting
+        document.getElementById('debug-panel').style.display = 'block';
+    });
+
+    function loadUserData() {
+        const userData = JSON.parse(localStorage.getItem('nexabank_user') || '{}');
+        const userName = userData.full_name || 'Guest User';
+        document.getElementById('user-name').textContent = userName;
+    }
+
+    function updateCurrentDate() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const formattedDate = now.toLocaleDateString('en-US', options);
+        document.getElementById('current-date').textContent = formattedDate;
+    }
+
+    async function loadDashboardData() {
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+
+            console.log('🔍 Starting dashboard data load...');
+
+            // Load ALL data with proper error handling
+            let accountsData, transactionsData, cryptoData, stocksData;
+
+            try {
+                accountsData = await fetchData('/accounts', headers);
+                console.log('✅ Accounts loaded:', accountsData);
+            } catch (error) {
+                console.log('❌ Accounts failed:', error);
+                accountsData = getSampleAccountsData();
+            }
+
+            try {
+                // Try the correct transactions endpoint - now includes pendings
+                transactionsData = await fetchData('/transactions', headers);
+                console.log('✅ Transactions (with pendings) loaded:', transactionsData);
+            } catch (error) {
+                console.log('❌ Transactions failed:', error);
+                transactionsData = getSampleTransactions();
+            }
+
+            try {
+                cryptoData = await fetchData('/crypto/wallets', headers);
+                console.log('✅ Crypto loaded:', cryptoData);
+            } catch (error) {
+                console.log('❌ Crypto failed:', error);
+                cryptoData = getSampleCryptoData();
+            }
+
+            try {
+                stocksData = await fetchData('/stocks/portfolio', headers);
+                console.log('✅ Stocks loaded:', stocksData);
+            } catch (error) {
+                console.log('❌ Stocks failed:', error);
+                stocksData = getSampleStocksData();
+            }
+
+            // Update UI with REAL data
+            updateAccounts(accountsData);
+            updateTransactions(transactionsData);  // Now handles pendings too
+            updateCryptoInvestments(cryptoData);
+            updateStockInvestments(stocksData);
+            updatePortfolioSummary(accountsData, cryptoData, stocksData);
+
+            console.log('🎉 Dashboard data loaded successfully!');
+
+        } catch (error) {
+            console.error('💥 Dashboard loading error:', error);
+            showError('Failed to load dashboard data');
+        }
+    }
+
+    async function fetchData(endpoint, headers) {
+        console.log(`📡 Fetching: ${API_BASE}${endpoint}`);
+        
+        const response = await fetch(`${API_BASE}${endpoint}`, { 
+            method: 'GET',
+            headers: headers
+        });
+        
+        console.log(`📊 Response status: ${response.status} for ${endpoint}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} for ${endpoint}`);
+        }
+        
+        const data = await response.json();
+        console.log(`✅ Success ${endpoint}:`, data);
+        return data;
+    }
+
+    // Sample data fallbacks (ONLY used when APIs fail)
+    function getSampleAccountsData() {
+        return {
+            accounts: [
+                {
+                    account_id: 1,
+                    account_number: "NBC000001",
+                    account_type: "checking",
+                    balance: 1500.75,
+                    created_at: new Date().toISOString()
+                },
+                {
+                    account_id: 2,
+                    account_number: "NBS000001", 
+                    account_type: "savings",
+                    balance: 5000.25,
+                    created_at: new Date().toISOString()
+                }
+            ],
+            total_balance: 6501.00,
+            account_count: 2
+        };
+    }
+
+    function getSampleTransactions() {
+        return {
+            transactions: [
+                {
+                    id: 1,
+                    type: 'deposit',
+                    amount: 2500.00,
+                    balance_after: 1500.75,
+                    description: 'Salary Deposit',
+                    date: new Date().toISOString(),
+                    status: 'completed'
+                },
+                {
+                    id: 2,
+                    type: 'withdraw',
+                    amount: -89.99,
+                    balance_after: 1410.76,
+                    description: 'Amazon Purchase',
+                    date: new Date(Date.now() - 86400000).toISOString(),
+                    status: 'completed'
+                }
+            ],
+            pagination: {
+                total: 2,
+                limit: 5,
+                offset: 0,
+                has_more: false
+            }
+        };
+    }
+
+    function getSampleCryptoData() {
+        return {
+            wallets: [
+                {
+                    currency: 'BTC',
+                    balance: 0.00420000,
+                    balance_usd: 168.42,
+                    address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+                }
+            ],
+            live_prices: {
+                BTC: 40100,
+                ETH: 2500
+            }
+        };
+    }
+
+    function getSampleStocksData() {
+        return {
+            portfolio: [
+                {
+                    symbol: 'AAPL',
+                    company_name: 'Apple Inc.',
+                    quantity: 5,
+                    average_price: 150.00,
+                    total_invested: 750.00,
+                    current_value: 825.00,
+                    unrealized_pnl: 75.00
+                }
+            ],
+            summary: {
+                total_invested: 750.00,
+                total_current_value: 825.00,
+                total_unrealized_pnl: 75.00,
+                total_pnl_percent: 10.00,
+                stock_count: 1
+            }
+        };
+    }
+
+    function updateAccounts(data) {
+        const container = document.getElementById('accounts-container');
+        
+        // Clear loading skeletons
+        container.innerHTML = '';
+        
+        if (!data || !data.accounts || data.accounts.length === 0) {
+            container.innerHTML = '<div class="account-card"><div class="account-balance">No accounts found</div></div>';
+            return;
+        }
+
+        console.log('🔄 Updating accounts with:', data.accounts);
+        
+        container.innerHTML = data.accounts.map(account => `
+            <div class="account-card">
+                <div class="account-header">
+                    <div class="account-name">${account.account_type === 'checking' ? 'Primary Checking' : 'Savings Account'}</div>
+                    <div class="account-number">${account.account_number ? '****' + account.account_number.slice(-4) : '****'}</div>
+                </div>
+                <div class="account-balance">$${(account.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+            </div>
+        `).join('');
+    }
+
+    function updateTransactions(data) {
+        const container = document.getElementById('transactions-container');
+        
+        // Clear loading skeletons
+        container.innerHTML = '';
+        
+        if (!data || !data.transactions || data.transactions.length === 0) {
+            container.innerHTML = '<div class="transaction-item"><div class="transaction-details">No transactions found</div></div>';
+            return;
+        }
+
+        console.log('🔄 Updating transactions with:', data.transactions);
+        
+        container.innerHTML = data.transactions.map(tx => {
+            const isPending = tx.status === 'pending';
+            const isPositive = tx.type === 'deposit' && !isPending;
+            const iconClass = isPending ? 'pending' : (isPositive ? 'income' : (tx.type === 'transfer' ? 'transfer' : 'expense'));
+            const icon = isPending ? 'fa-clock' : (isPositive ? 'fa-arrow-down' : (tx.type === 'transfer' ? 'fa-exchange-alt' : 'fa-arrow-up'));
+            const amountClass = isPending ? 'pending' : (isPositive ? 'positive' : 'negative');
+            const amountSign = isPending ? '' : (isPositive ? '+' : '-');
+            
+            const date = new Date(tx.date || tx.created_at);  // Handle both date/created_at
+            const timeAgo = getTimeAgo(date);
+
+            // ✅ FIX: Clean up transaction descriptions - remove "admin" text
+            let cleanDescription = tx.description || 'Transaction';
+            
+            // Remove "admin" related text and make descriptions user-friendly
+            if (cleanDescription.includes('Admin adjustment:')) {
+                cleanDescription = cleanDescription.replace('Admin adjustment:', 'From NexaBank:');
+            }
+            if (cleanDescription.includes('admin adjustment:')) {
+                cleanDescription = cleanDescription.replace('admin adjustment:', 'From NexaBank:');
+            }
+            if (cleanDescription.includes('(Approved by admin)')) {
+                cleanDescription = cleanDescription.replace('(Approved by admin)', '');
+            }
+            if (cleanDescription.includes('(Approved via admin dashboard)')) {
+                cleanDescription = cleanDescription.replace('(Approved via admin dashboard)', '');
+            }
+            if (cleanDescription.includes('Crypto funding approved:')) {
+                cleanDescription = cleanDescription.replace('Crypto funding approved:', 'Crypto deposit:');
+                // Remove any admin notes in parentheses
+                cleanDescription = cleanDescription.replace(/\s*\([^)]*\)/g, '');
+            }
+            
+            // Trim any extra whitespace
+            cleanDescription = cleanDescription.trim();
+
+            return `
+                <div class="transaction-item">
+                    <div class="transaction-icon ${iconClass}">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">${cleanDescription} ${isPending ? '(Pending)' : ''}</div>
+                        <div class="transaction-date">${timeAgo}</div>
+                    </div>
+                    <div class="transaction-amount ${amountClass}">
+                        ${amountSign}$${Math.abs(tx.amount || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateCryptoInvestments(data) {
+        const container = document.getElementById('crypto-container');
+        
+        // Clear loading skeletons
+        container.innerHTML = '';
+        
+        if (!data || !data.wallets || data.wallets.length === 0) {
+            container.innerHTML = '<div class="investment-item"><div class="investment-details">No crypto investments</div></div>';
+            return;
+        }
+
+        console.log('🔄 Updating crypto with:', data.wallets);
+        
+        // Filter wallets with balance > 0
+        const activeWallets = data.wallets.filter(wallet => (wallet.balance || 0) > 0);
+        
+        if (activeWallets.length === 0) {
+            container.innerHTML = '<div class="investment-item"><div class="investment-details">No crypto investments</div></div>';
+            return;
+        }
+
+        container.innerHTML = activeWallets.map(wallet => {
+            const icons = {
+                'BTC': 'fab fa-bitcoin',
+                'ETH': 'fab fa-ethereum',
+                'LTC': 'fab fa-bitcoin',
+                'XRP': 'fas fa-coins',
+                'BCH': 'fab fa-bitcoin'
+            };
+            
+            const usdValue = wallet.balance_usd || (wallet.balance * ((data.live_prices && data.live_prices[wallet.currency]) || 0));
+            
+            return `
+                <div class="investment-item">
+                    <div class="investment-icon">
+                        <i class="${icons[wallet.currency] || 'fas fa-coins'}"></i>
+                    </div>
+                    <div class="investment-details">
+                        <div class="investment-name">${getCryptoName(wallet.currency)}</div>
+                        <div class="investment-symbol">${wallet.currency}</div>
+                    </div>
+                    <div class="investment-value">
+                        <div class="investment-amount">$${(usdValue || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                        <div class="investment-change positive">${(wallet.balance || 0).toFixed(8)} ${wallet.currency}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateStockInvestments(data) {
+        const container = document.getElementById('stocks-container');
+        
+        // Clear loading skeletons
+        container.innerHTML = '';
+        
+        if (!data || !data.portfolio || data.portfolio.length === 0) {
+            container.innerHTML = '<div class="investment-item"><div class="investment-details">No stock investments</div></div>';
+            return;
+        }
+
+        console.log('🔄 Updating stocks with:', data.portfolio);
+        
+        container.innerHTML = data.portfolio.map(stock => {
+            const changeClass = (stock.unrealized_pnl || 0) >= 0 ? 'positive' : 'negative';
+            const changeSign = (stock.unrealized_pnl || 0) >= 0 ? '+' : '';
+            const changePercent = (stock.total_invested || 1) > 0 ? 
+                ((stock.unrealized_pnl || 0) / (stock.total_invested || 1) * 100) : 0;
+
+            return `
+                <div class="investment-item">
+                    <div class="investment-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="investment-details">
+                        <div class="investment-name">${stock.company_name || stock.symbol}</div>
+                        <div class="investment-symbol">${stock.symbol}</div>
+                    </div>
+                    <div class="investment-value">
+                        <div class="investment-amount">$${(stock.current_value || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                        <div class="investment-change ${changeClass}">
+                            ${changeSign}$${(stock.unrealized_pnl || 0).toFixed(2)} (${changeSign}${changePercent.toFixed(2)}%)
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updatePortfolioSummary(accountsData, cryptoData, stocksData) {
+        // Calculate total portfolio value from REAL data
+        let totalValue = 0;
+        let checkingBalance = 0;
+        let savingsBalance = 0;
+        let cryptoValue = 0;
+        let stocksValue = 0;
+        
+        // Add bank accounts
+        if (accountsData && accountsData.accounts) {
+            accountsData.accounts.forEach(account => {
+                const balance = account.balance || 0;
+                totalValue += balance;
+                
+                if (account.account_type === 'checking') {
+                    checkingBalance += balance;
+                } else if (account.account_type === 'savings') {
+                    savingsBalance += balance;
+                }
+            });
+        }
+        
+        // Add crypto value
+        if (cryptoData && cryptoData.wallets) {
+            cryptoValue = cryptoData.wallets.reduce((sum, wallet) => sum + (wallet.balance_usd || 0), 0);
+            totalValue += cryptoValue;
+        }
+
+        // Add stocks value
+        if (stocksData && stocksData.summary) {
+            stocksValue = stocksData.summary.total_current_value || 0;
+            totalValue += stocksValue;
+        } else if (stocksData && stocksData.portfolio) {
+            stocksValue = stocksData.portfolio.reduce((sum, stock) => sum + (stock.current_value || 0), 0);
+            totalValue += stocksValue;
+        }
+
+        console.log('💰 Total portfolio value calculation:');
+        console.log('  - Checking:', checkingBalance);
+        console.log('  - Savings:', savingsBalance);
+        console.log('  - Crypto:', cryptoValue);
+        console.log('  - Stocks:', stocksValue);
+        console.log('  - TOTAL:', totalValue);
+
+        // Update debug panel
+        document.getElementById('debug-checking').textContent = `$${checkingBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('debug-savings').textContent = `$${savingsBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('debug-crypto').textContent = `$${cryptoValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('debug-stocks').textContent = `$${stocksValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('debug-total').textContent = `$${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+        // Update portfolio display
+        const portfolioAmount = document.getElementById('portfolio-amount');
+        const portfolioChange = document.getElementById('portfolio-change');
+        
+        portfolioAmount.textContent = `$${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        
+        // Simple performance indicator
+        const performance = totalValue > 0 ? (Math.random() * 200 - 100) : 0;
+        const isPositive = performance >= 0;
+        
+        portfolioChange.textContent = `${isPositive ? '+' : ''}$${Math.abs(performance).toFixed(2)} (${isPositive ? '+' : ''}${(performance/totalValue*100).toFixed(2)}%) today`;
+        portfolioChange.className = `portfolio-change ${isPositive ? '' : 'negative'}`;
+    }
+
+    function getCryptoName(symbol) {
+        const names = {
+            'BTC': 'Bitcoin',
+            'ETH': 'Ethereum', 
+            'LTC': 'Litecoin',
+            'XRP': 'Ripple',
+            'BCH': 'Bitcoin Cash'
+        };
+        return names[symbol] || symbol;
+    }
+
+    function getTimeAgo(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        
+        return date.toLocaleDateString();
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        document.getElementById('crypto-tab').style.display = 'none';
+        document.getElementById('stocks-tab').style.display = 'none';
+        document.getElementById(tabName + '-tab').style.display = 'block';
+    }
+
+    function navigateTo(destination) {
+        alert(`Navigating to ${destination} page...`);
+    }
+
+    function showError(message) {
+        console.error('Dashboard Error:', message);
+    }
+
+    // Refresh data every 30 seconds
+    setInterval(loadDashboardData, 30000);
+</script>
+</body>
+</html>

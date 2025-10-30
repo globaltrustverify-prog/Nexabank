@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="NexaBank">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NexaBank">
+    <meta name="description" content="Modern Banking & Crypto Platform">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#1e40af">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="theme-color" content="#1e40af">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167x167.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaBank - Modern Investment Banking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Enhanced Base Styles */
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --secondary-dark: #047857;
+            --accent: #f59e0b;
+            --accent-dark: #d97706;
+            --dark: #1f2937;
+            --darker: #111827;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        h1, h2, h3, h4 {
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem; /* Reduced from 3rem */
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2rem; /* Reduced from 2.5rem */
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.4rem; /* Reduced from 1.5rem */
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem; /* Added consistent font size */
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition-slow);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(30, 64, 175, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-subtitle {
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem; /* Reduced from 0.9rem */
+            margin-bottom: 1rem;
+        }
+
+        /* Enhanced Header */
+        header {
+            background-color: rgba(255, 255, 255, 0);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem; /* Reduced from 1.8rem */
+            margin-bottom: 0;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem; /* Added font size */
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-actions .btn {
+            margin-left: 15px;
+            font-size: 0.9rem; /* Reduced button font size */
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: var(--transition-slow);
+            padding: 80px 30px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .mobile-nav-links li {
+            margin-bottom: 20px;
+        }
+
+        .mobile-nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: block;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-nav-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mobile-nav-actions .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 160px 0 100px; /* Reduced padding */
+            position: relative;
+            overflow: hidden;
+            
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem; /* Reduced from 3.5rem */
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.1rem; /* Reduced from 1.2rem */
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero-buttons .btn {
+            background-color: var(--white);
+            color: var(--primary);
+        }
+
+        .hero-buttons .btn-secondary {
+            background-color: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .hero-buttons .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 500px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .dashboard-preview {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+        }
+
+        .dashboard-header {
+            background: var(--lighter);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .dashboard-content {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .metric-card {
+            background: var(--lighter);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            font-size: 1.1rem; /* Reduced from 1.2rem */
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.75rem; /* Reduced from 0.8rem */
+            color: var(--gray);
+        }
+
+        /* Enhanced Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--gradient-primary);
+            transition: var(--transition-slow);
+        }
+
+        .feature-card:hover::before {
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(30, 64, 175, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            background: var(--gradient-primary);
+            transform: scale(1.1);
+        }
+
+        .feature-card:hover .feature-icon i {
+            color: var(--white);
+        }
+
+        .feature-icon i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        /* Enhanced Stats Section */
+        .stats {
+            background-color: var(--darker);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.02)"/></svg>');
+            background-size: cover;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem; /* Reduced from 3rem */
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1rem; /* Reduced from 1.1rem */
+            opacity: 0.9;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background-color: var(--lighter);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3.5rem; /* Reduced from 4rem */
+            color: var(--primary-light);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-content {
+            margin-bottom: 20px;
+            font-style: italic;
+            font-size: 0.95rem; /* Added font size */
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .author-info h4 {
+            margin-bottom: 5px;
+            font-size: 1.1rem; /* Added font size */
+        }
+
+        .author-info p {
+            margin-bottom: 0;
+            color: var(--gray);
+            font-size: 0.85rem; /* Reduced from 0.9rem */
+        }
+
+        /* Enhanced CTA Section */
+        .cta {
+            background: var(--gradient-secondary);
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 2.2rem; /* Reduced from 2.5rem */
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.05rem; /* Reduced from 1.1rem */
+        }
+
+        .cta .btn {
+            background-color: var(--white);
+            color: var(--secondary);
+        }
+
+        .cta .btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Enhanced Footer */
+        footer {
+            background-color: var(--darker);
+            color: var(--white);
+            padding: 70px 0 30px; /* Reduced padding */
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem; /* Reduced from 1.3rem */
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem; /* Added font size */
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--gradient-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem; /* Reduced from 0.9rem */
+        }
+
+        /* PWA Install Prompt Styles */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10000;
+            max-width: 400px;
+            width: 90%;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .install-content {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .install-icon img {
+            border-radius: 16px;
+        }
+
+        .install-text {
+            flex: 1;
+        }
+
+        .install-text h3 {
+            margin: 0 0 5px 0;
+            color: #1f2937;
+            font-size: 1.1rem;
+        }
+
+        .install-text p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .install-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-btn-primary {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .install-btn-primary:hover {
+            background: #1e3a8a;
+        }
+
+        .install-btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .install-btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .install-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .install-actions {
+                width: 100%;
+            }
+            
+            .install-actions button {
+                flex: 1;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(-50%) translateX(0);
+            }
+            50% {
+                transform: translateY(-50%) translateX(-10px);
+            }
+            100% {
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .nav-links, .nav-actions {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero {
+                padding: 140px 0 80px;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 250px;
+                margin-bottom: 10px;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <h1><img src="./images/Dark_Blue_and_Gold_Elegant_Banking_Finance_Logo_20251029_025736_0000-removebg-preview (1) (1).png" alt="" height="40px" ></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#investing">Investing</a></li>
+                    <li><a href="#banking">Banking</a></li>
+                    <li><a href="#security">Security</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="login.html" class="btn btn-secondary">Sign In</a>
+                    <a href="register.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+        <ul class="mobile-nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#investing">Investing</a></li>
+            <li><a href="#banking">Banking</a></li>
+            <li><a href="#security">Security</a></li>
+        </ul>
+        <div class="mobile-nav-actions">
+            <a href="login.html" class="btn btn-secondary">Sign In</a>
+            <a href="register.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Banking Reimagined for Modern Investors</h1>
+                <p>NexaBank combines traditional banking security with cutting-edge investment tools. Manage your cash, crypto, and stocks in one powerful platform.</p>
+                <div class="hero-buttons">
+                    <a href="register.html" class="btn btn-large"><i class="fas fa-rocket"></i>Open Your Account</a>
+                    <a href="#" class="btn btn-secondary btn-large"><i class="fas fa-play-circle"></i>Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="dashboard-title">Portfolio Overview</div>
+                        <div class="dashboard-actions">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="metric-card">
+                            <div class="metric-value">$24,582</div>
+                            <div class="metric-label">Total Balance</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">+5.2%</div>
+                            <div class="metric-label">Today's Gain</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">₿0.42</div>
+                            <div class="metric-label">Bitcoin</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">18</div>
+                            <div class="metric-label">Stocks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-subtitle">Why Choose NexaBank</div>
+                <h2>All Your Financial Needs in One Place</h2>
+                <p>NexaBank provides a comprehensive suite of financial services designed for today's investors.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Smart Investing</h3>
+                    <p>Access stocks, ETFs, and crypto with advanced trading tools and real-time market data.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Bank-Grade Security</h3>
+                    <p>Your funds and data are protected with enterprise-level security and encryption.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Instant Transfers</h3>
+                    <p>Move money between accounts, send to contacts, or fund investments in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>Crypto Integration</h3>
+                    <p>Buy, sell, and store popular cryptocurrencies alongside your traditional assets.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile-First Design</h3>
+                    <p>Bank and invest on the go with our intuitive mobile app designed for modern users.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Get help whenever you need it with our round-the-clock customer support team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">500K+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$5B+</div>
+                    <div class="stat-label">Assets Managed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.8/5</div>
+                    <div class="stat-label">Customer Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-subtitle">Testimonials</div>
+                <h2>What Our Clients Say</h2>
+                <p>Don't just take our word for it. Here's what our customers have to say about their experience with NexaBank.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "NexaBank has completely transformed how I manage my finances. The ability to track my stocks and crypto in one app is a game-changer."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <div class="author-info">
+                            <h4>Sarah Mitchell</h4>
+                            <p>Investment Analyst</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "As someone new to investing, I found NexaBank incredibly intuitive. The educational resources helped me make informed decisions."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RJ</div>
+                        <div class="author-info">
+                            <h4>Robert Johnson</h4>
+                            <p>Small Business Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "The security features give me peace of mind, and the customer support team is always helpful when I have questions."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">ED</div>
+                        <div class="author-info">
+                            <h4>Emily Davis</h4>
+                            <p>Software Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Banking Experience?</h2>
+                <p>Join thousands of investors who trust NexaBank with their financial future. Open your account in minutes and get started today.</p>
+                <a href="register.html" class="btn btn-large"><i class="fas fa-user-plus"></i>Get Started Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>NexaBank</h3>
+                    <p>Modern banking solutions for today's investors.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Personal Banking</a></li>
+                        <li><a href="#">Investment Accounts</a></li>
+                        <li><a href="#">Crypto Trading</a></li>
+                        <li><a href="#">Business Accounts</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 NexaBank. All rights reserved. Banking services provided by NexaBank, Member FDIC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="install-prompt" style="display: none;">
+        <div class="install-content">
+            <div class="install-icon">
+                <img src="/icons/icon-192x192.png" alt="NexaBank" width="64" height="64">
+            </div>
+            <div class="install-text">
+                <h3>Install NexaBank</h3>
+                <p>Get the best banking experience with our app. Fast, secure, and works offline.</p>
+            </div>
+            <div class="install-actions">
+                <button id="installCancel" class="install-btn-secondary">Not Now</button>
+                <button id="installApp" class="install-btn-primary">Install App</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const overlay = document.querySelector('.overlay');
+        const body = document.body;
+
+        function toggleMobileMenu() {
+            mobileNav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+            
+            // Change icon based on menu state
+            const icon = mobileMenu.querySelector('i');
+            if (mobileNav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        mobileMenu.addEventListener('click', toggleMobileMenu);
+        overlay.addEventListener('click', toggleMobileMenu);
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', toggleMobileMenu);
+        });
+
+        // Enhanced scroll effect for navigation
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'var(--shadow)';
+            }
+        });
+
+        // Simple animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+
+        // PWA Installation Handler
+        class PWAInstaller {
+            constructor() {
+                this.deferredPrompt = null;
+                this.installPrompt = document.getElementById('installPrompt');
+                this.installAppBtn = document.getElementById('installApp');
+                this.installCancelBtn = document.getElementById('installCancel');
+                
+                this.init();
+            }
+            
+            init() {
+                // Listen for before install prompt
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    console.log('🚀 PWA install prompt available');
+                    e.preventDefault();
+                    this.deferredPrompt = e;
+                    this.showInstallPrompt();
+                });
+                
+                // Listen for app installed
+                window.addEventListener('appinstalled', () => {
+                    console.log('✅ PWA installed successfully');
+                    this.hideInstallPrompt();
+                    this.deferredPrompt = null;
+                    this.showInstallSuccess();
+                });
+                
+                // Install button click
+                this.installAppBtn.addEventListener('click', () => {
+                    this.installApp();
+                });
+                
+                // Cancel button click
+                this.installCancelBtn.addEventListener('click', () => {
+                    this.hideInstallPrompt();
+                    // Don't show again for 30 days
+                    localStorage.setItem('installPromptDismissed', Date.now());
+                });
+                
+                // Check if already installed
+                this.checkIfInstalled();
+                
+                // Register service worker
+                this.registerServiceWorker();
+            }
+            
+            showInstallPrompt() {
+                // Check if user recently dismissed the prompt
+                const dismissed = localStorage.getItem('installPromptDismissed');
+                if (dismissed) {
+                    const dismissTime = parseInt(dismissed);
+                    const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+                    if (Date.now() - dismissTime < thirtyDays) {
+                        return; // Don't show if dismissed within 30 days
+                    }
+                }
+                
+                this.installPrompt.style.display = 'block';
+            }
+            
+            hideInstallPrompt() {
+                this.installPrompt.style.display = 'none';
+            }
+            
+            async installApp() {
+                if (!this.deferredPrompt) {
+                    console.log('❌ No install prompt available');
+                    return;
+                }
+                
+                console.log('📱 Installing PWA...');
+                this.deferredPrompt.prompt();
+                
+                const { outcome } = await this.deferredPrompt.userChoice;
+                console.log(`User response to install prompt: ${outcome}`);
+                
+                this.deferredPrompt = null;
+                this.hideInstallPrompt();
+            }
+            
+            checkIfInstalled() {
+                // Check if app is already installed
+                if (window.matchMedia('(display-mode: standalone)').matches) {
+                    console.log('✅ App running in standalone mode');
+                    this.hideInstallPrompt();
+                }
+                
+                // Check for other installation indicators
+                if (window.navigator.standalone) {
+                    console.log('✅ App installed on iOS');
+                    this.hideInstallPrompt();
+                }
+            }
+            
+            async registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    try {
+                        const registration = await navigator.serviceWorker.register('/sw.js');
+                        console.log('✅ Service Worker registered:', registration);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('🔄 New Service Worker found:', newWorker);
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    this.showUpdatePrompt();
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        console.error('❌ Service Worker registration failed:', error);
+                    }
+                }
+            }
+            
+            showInstallSuccess() {
+                // Show installation success message
+                const successMsg = document.createElement('div');
+                successMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #059669;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    z-index: 10000;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                `;
+                successMsg.textContent = '🎉 NexaBank installed successfully!';
+                document.body.appendChild(successMsg);
+                
+                setTimeout(() => {
+                    successMsg.remove();
+                }, 3000);
+            }
+            
+            showUpdatePrompt() {
+                // Show update available prompt
+                const updateMsg = document.createElement('div');
+                updateMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #f59e0b;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    z-index: 10000;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    cursor: pointer;
+                `;
+                updateMsg.textContent = '🔄 Update available! Click to refresh.';
+                updateMsg.addEventListener('click', () => {
+                    window.location.reload();
+                });
+                document.body.appendChild(updateMsg);
+                
+                setTimeout(() => {
+                    updateMsg.remove();
+                }, 5000);
+            }
+        }
+
+        // Initialize PWA installer when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new PWAInstaller();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --warning: #f59e0b;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .withdraw-container {
+            max-width: 480px;
+            width: 100%;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .form-group select,
+        .form-group input[type="number"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--lighter);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .crypto-options {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .crypto-options.active {
+            display: block;
+        }
+
+        .error {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error.active {
+            display: block;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        .submit-btn:disabled {
+            background: var(--lighter);
+            cursor: not-allowed;
+        }
+
+        .success {
+            color: var(--success);
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .success.active {
+            display: block;
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            .withdraw-container {
+                padding: 15px;
+            }
+            .header h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="withdraw-container">
+        <div class="header">
+            <h2>Withdraw Funds</h2>
+        </div>
+
+        <div class="form-group">
+            <label for="account">Select Account</label>
+            <select id="account" name="account">
+                <option value="" disabled selected>Loading...</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount (USD)</label>
+            <input type="number" id="amount" name="amount" min="0" step="0.01" placeholder="Enter amount">
+            <div id="amount-error" class="error">Invalid amount or insufficient funds</div>
+        </div>
+
+        <div class="form-group radio-group">
+            <label>Destination</label>
+            <div class="radio-item">
+                <input type="radio" id="cash" name="destination" value="cash" checked>
+                <label for="cash">Cash Withdrawal</label>
+            </div>
+            <div class="radio-item">
+                <input type="radio" id="crypto" name="destination" value="crypto">
+                <label for="crypto">Crypto Withdrawal</label>
+            </div>
+            <!-- Optional: Add bank transfer if implemented -->
+            <!-- <div class="radio-item">
+                <input type="radio" id="bank" name="destination" value="bank">
+                <label for="bank">Bank Transfer</label>
+            </div> -->
+        </div>
+
+        <div class="form-group crypto-options" id="crypto-options">
+            <label for="currency">Select Currency</label>
+            <select id="currency" name="currency">
+                <option value="" disabled selected>Select currency</option>
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="ETH">Ethereum (ETH)</option>
+                <!-- Add more as per crypto_service.config.SUPPORTED_CRYPTO -->
+            </select>
+            <div id="currency-error" class="error">Please select a currency</div>
+        </div>
+
+        <div class="form-group" id="pin-group" style="display: none;">
+            <label for="pin">Enter PIN</label>
+            <input type="password" id="pin" name="pin" placeholder="Enter 4-digit PIN">
+            <div id="pin-error" class="error">Invalid PIN</div>
+        </div>
+
+        <button id="submit-btn" class="submit-btn" disabled>Withdraw</button>
+        <div id="success-msg" class="success">Withdrawal successful! Check Recent Transactions.</div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        const MIN_WITHDRAWAL = 10; // To be set in config.py
+        const DAILY_LIMIT = 10000; // To be set in config.py
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('nexabank_token');
+            if (!token) window.location.href = 'login.html';
+
+            loadAccounts(token);
+            setupEventListeners();
+        });
+
+        async function loadAccounts(token) {
+            try {
+                const response = await fetch(`${API_BASE}/accounts`, {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+                });
+                if (!response.ok) throw new Error('Failed to load accounts');
+                const data = await response.json();
+                const select = document.getElementById('account');
+                select.innerHTML = '<option value="" disabled selected>Select account</option>';
+                data.accounts.forEach(account => {
+                    select.innerHTML += `<option value="${account.account_number}">${account.account_type === 'checking' ? 'Primary Checking' : 'Savings Account'} (****${account.account_number.slice(-4)}: $${account.balance.toFixed(2)})</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading accounts:', error);
+                document.getElementById('account').innerHTML = '<option value="" disabled selected>Error loading accounts</option>';
+            }
+        }
+
+        function setupEventListeners() {
+            const accountSelect = document.getElementById('account');
+            const amountInput = document.getElementById('amount');
+            const destinationRadios = document.querySelectorAll('input[name="destination"]');
+            const cryptoOptions = document.getElementById('crypto-options');
+            const currencySelect = document.getElementById('currency');
+            const pinGroup = document.getElementById('pin-group');
+            const submitBtn = document.getElementById('submit-btn');
+
+            destinationRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    cryptoOptions.classList.toggle('active', radio.value === 'crypto');
+                    pinGroup.style.display = radio.value === 'crypto' ? 'block' : 'none'; // Enable PIN for crypto
+                    validateForm();
+                });
+            });
+
+            [accountSelect, amountInput, currencySelect].forEach(element => {
+                element.addEventListener('change', validateForm);
+                element.addEventListener('input', validateForm);
+            });
+
+            submitBtn.addEventListener('click', handleWithdraw);
+        }
+
+        function validateForm() {
+            const accountSelect = document.getElementById('account');
+            const amountInput = document.getElementById('amount');
+            const currencySelect = document.getElementById('currency');
+            const submitBtn = document.getElementById('submit-btn');
+            const amountError = document.getElementById('amount-error');
+            const currencyError = document.getElementById('currency-error');
+
+            const selectedAccount = accountSelect.value;
+            const amount = parseFloat(amountInput.value) || 0;
+            const destination = document.querySelector('input[name="destination"]:checked').value;
+            const currency = currencySelect.value;
+
+            let isValid = true;
+
+            if (!selectedAccount) {
+                isValid = false;
+            }
+
+            if (amount <= 0 || amount < MIN_WITHDRAWAL || isNaN(amount)) {
+                amountError.classList.add('active');
+                isValid = false;
+            } else {
+                amountError.classList.remove('active');
+            }
+
+            if (destination === 'crypto' && !currency) {
+                currencyError.classList.add('active');
+                isValid = false;
+            } else {
+                currencyError.classList.remove('active');
+            }
+
+            // Simulate balance check (replace with API call)
+            const balance = parseFloat(accountSelect.options[accountSelect.selectedIndex].text.match(/\$([\d.]+)/)[1]) || 0;
+            if (amount > balance - (accountSelect.options[accountSelect.selectedIndex].text.includes('Checking') ? 5 : 10)) {
+                amountError.textContent = 'Insufficient funds or below minimum balance';
+                amountError.classList.add('active');
+                isValid = false;
+            }
+
+            submitBtn.disabled = !isValid;
+        }
+
+        async function handleWithdraw() {
+            const token = localStorage.getItem('nexabank_token');
+            const submitBtn = document.getElementById('submit-btn');
+            const successMsg = document.getElementById('success-msg');
+            const amountError = document.getElementById('amount-error');
+            const pinError = document.getElementById('pin-error');
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+
+            const accountNumber = document.getElementById('account').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const destination = document.querySelector('input[name="destination"]:checked').value;
+            const currency = document.getElementById('currency').value;
+            const pin = document.getElementById('pin').value;
+
+            let endpoint = '';
+            let payload = { amount, account_number: accountNumber };
+
+            if (destination === 'cash') {
+                endpoint = '/withdraw';
+            } else if (destination === 'crypto') {
+                if (!pin || pin.length !== 4) {
+                    pinError.classList.add('active');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
+                    return;
+                }
+                endpoint = '/bank/withdraw-to-crypto';
+                payload = { ...payload, currency, account_type: 'checking' }; // Adjust account_type as needed
+                const pinResponse = await fetch(`${API_BASE}/verify-pin`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin })
+                });
+                if (!pinResponse.ok) {
+                    pinError.classList.add('active');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('Withdrawal failed');
+                const data = await response.json();
+                successMsg.classList.add('active');
+                setTimeout(() => window.location.href = 'dashboard.html', 2000); // Redirect after 2s
+            } catch (error) {
+                amountError.textContent = error.message || 'Withdrawal failed';
+                amountError.classList.add('active');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }
+        }
+
+        // Placeholder for verify-pin (to be implemented)
+        // async function verifyPin(pin) {
+        //     // Implement PIN verification logic
+        //     return true; // Mock for now
+        // }
+    </script>
+</body>
+</html>

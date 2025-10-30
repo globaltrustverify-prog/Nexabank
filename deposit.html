@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--white);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        /* Deposit Tabs */
+        .deposit-tabs {
+            display: flex;
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            min-width: 100px;
+        }
+
+        .tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        /* Deposit Form */
+        .deposit-form {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--lighter);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .account-balance {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .amount-input-container {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .amount-input {
+            padding-left: 30px !important;
+        }
+
+        .crypto-currency-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .crypto-option {
+            padding: 12px;
+            border: 2px solid var(--lighter);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .crypto-option.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--white);
+        }
+
+        .crypto-option .crypto-symbol {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .crypto-option .crypto-name {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .conversion-info {
+            background: var(--lighter);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        .conversion-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .conversion-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .wallet-address {
+            background: var(--lighter);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        .copy-button {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            transition: var(--transition);
+        }
+
+        .copy-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Live Prices */
+        .live-prices {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .price-item {
+            padding: 12px;
+            border: 1px solid var(--lighter);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .price-symbol {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .price-value {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .price-change {
+            font-size: 0.7rem;
+            color: var(--success);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--lighter);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading .loading-spinner {
+            display: block;
+        }
+
+        .loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .success-screen.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--white);
+            font-size: 2rem;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .success-message {
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .deposit-details {
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--lighter);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .deposit-form {
+                padding: 20px;
+            }
+            
+            .crypto-currency-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .price-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="dashboard.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <h1><img src="./images/Dark_Blue_and_Gold_Elegant_Banking_Finance_Logo_20251029_025736_0000-removebg-preview (1) (1).png" alt="" height="40px" ></h1>
+            </div>
+            <p>Add Funds</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Live Crypto Prices -->
+            <div class="live-prices">
+                <h3 style="margin-bottom: 15px; text-align: center;">Live Crypto Prices</h3>
+                <div class="price-grid" id="live-prices">
+                    <!-- Prices will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Deposit Type Selection -->
+            <div id="deposit-screen">
+                <h2 class="section-title">Add Funds</h2>
+                
+                <div class="deposit-tabs">
+                    <div class="tab active" onclick="switchDepositType('bank')">
+                        💰 Bank
+                    </div>
+                    <div class="tab" onclick="switchDepositType('crypto-funding')">
+                        🪙 Crypto to Bank
+                    </div>
+                    <div class="tab" onclick="switchDepositType('sell-crypto')">
+                        💸 Sell Crypto
+                    </div>
+                </div>
+
+                <!-- Bank Deposit Form -->
+                <div class="deposit-form" id="bank-form">
+                    <div class="form-group">
+                        <label for="bank-from-account">From Account</label>
+                        <select id="bank-from-account" class="form-control" onchange="updateBankFromAccountBalance()">
+                            <option value="">Select account</option>
+                        </select>
+                        <div class="account-balance" id="bank-from-account-balance"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bank-to-account">To Account</label>
+                        <select id="bank-to-account" class="form-control">
+                            <option value="">Select account</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bank-amount">Amount</label>
+                        <div class="amount-input-container">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="bank-amount" class="form-control amount-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="error-message" id="bank_amount_error">Invalid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bank-description">Description (Optional)</label>
+                        <input type="text" id="bank-description" class="form-control" placeholder="e.g., Cash deposit">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" id="bank-deposit-btn" onclick="processBankDeposit()">
+                            <span class="btn-text">Deposit</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Crypto to Bank Funding Form -->
+                <div class="deposit-form" id="crypto-funding-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Select Cryptocurrency</label>
+                        <div class="crypto-currency-selector" id="crypto-funding-selector">
+                            <!-- Crypto options will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="funding-usd-amount">USD Amount to Deposit</label>
+                        <div class="amount-input-container">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="funding-usd-amount" class="form-control amount-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="error-message" id="funding_amount_error">Invalid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="funding-target-account">Deposit to Account</label>
+                        <select id="funding-target-account" class="form-control">
+                            <option value="">Select account</option>
+                        </select>
+                    </div>
+
+                    <div class="conversion-info" id="crypto-funding-conversion" style="display: none;">
+                        <!-- Conversion details will be shown here -->
+                    </div>
+
+                    <div class="wallet-address" id="crypto-funding-address" style="display: none;">
+                        <!-- Wallet address will be shown here -->
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" id="crypto-funding-btn" onclick="processCryptoFunding()">
+                            <span class="btn-text">Get Deposit Address</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sell Crypto Form -->
+                <div class="deposit-form" id="sell-crypto-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Select Cryptocurrency</label>
+                        <div class="crypto-currency-selector" id="sell-crypto-selector">
+                            <!-- Crypto options will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sell-crypto-amount">Crypto Amount to Sell</label>
+                        <input type="number" id="sell-crypto-amount" class="form-control" placeholder="0.00000000" min="0" step="0.00000001">
+                        <div class="error-message" id="sell_amount_error">Invalid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sell-target-account">Deposit to Account</label>
+                        <select id="sell-target-account" class="form-control">
+                            <option value="">Select account</option>
+                        </select>
+                    </div>
+
+                    <div class="conversion-info" id="sell-conversion" style="display: none;">
+                        <!-- Conversion details will be shown here -->
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" id="sell-crypto-btn" onclick="processSellCrypto()">
+                            <span class="btn-text">Sell Crypto</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="success-screen">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 class="success-title" id="success-title">Deposit Successful!</h3>
+                <p class="success-message" id="success-message">
+                    Your funds have been deposited successfully.
+                </p>
+                
+                <div class="deposit-details" id="deposit-details">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="goToDashboard()">
+                        Go to Dashboard
+                    </button>
+                    <button class="btn btn-secondary" onclick="makeAnotherDeposit()">
+                        Make Another Deposit
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </a>
+            <a href="accounts.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Accounts</div>
+            </a>
+            <a href="deposit.html" class="nav-item active">
+                <div class="nav-icon">📥</div>
+                <div class="nav-label">Deposit</div>
+            </a>
+            <a href="transfer.html" class="nav-item">
+                <div class="nav-icon">🔄</div>
+                <div class="nav-label">Transfer</div>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Profile</div>
+            </a>
+        </nav>
+    </div>
+<script>
+    const API_BASE = 'http://localhost:5000/api';
+    let userAccounts = [];
+    let cryptoWallets = [];
+    let livePrices = {};
+    let currentDepositType = 'bank';
+    let selectedCryptoCurrency = '';
+    let priceUpdateInterval;
+    let isProcessing = false;
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Page loaded, initializing...');
+        loadUserAccounts();
+        loadCryptoWallets();
+        setupEventListeners();
+        
+        // Start live price updates every 30 seconds
+        priceUpdateInterval = setInterval(loadCryptoWallets, 30000);
+    });
+
+    // Clean up interval when page unloads
+    window.addEventListener('beforeunload', function() {
+        if (priceUpdateInterval) {
+            clearInterval(priceUpdateInterval);
+        }
+    });
+
+    async function loadUserAccounts() {
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            console.log('Loading user accounts...');
+            const response = await fetch(`${API_BASE}/accounts`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                userAccounts = data.accounts || [];
+                console.log('Accounts loaded:', userAccounts.length);
+                populateAccountDropdowns();
+            } else {
+                throw new Error('Failed to load accounts');
+            }
+        } catch (error) {
+            console.error('Error loading accounts:', error);
+            alert('Failed to load accounts. Please try again.');
+        }
+    }
+
+    async function loadCryptoWallets() {
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            console.log('Loading crypto wallets...');
+            const response = await fetch(`${API_BASE}/crypto/wallets`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                cryptoWallets = data.wallets || [];
+                console.log('Crypto wallets loaded:', cryptoWallets.length);
+                
+                // Use live prices from API or fallback to mock prices
+                if (data.live_prices && Object.keys(data.live_prices).length > 0) {
+                    livePrices = data.live_prices;
+                } else {
+                    // Fallback to mock prices if API doesn't provide them
+                    livePrices = {
+                        'BTC': 45000.00,
+                        'ETH': 3000.00,
+                        'LTC': 75.50,
+                        'XRP': 0.65,
+                        'BCH': 250.00,
+                        'ADA': 0.45,
+                        'USDT': 1.00
+                    };
+                }
+                
+                updateLivePrices();
+                populateCryptoSelectors();
+                updateAllConversionInfo();
+                
+            } else {
+                throw new Error('Failed to load crypto wallets');
+            }
+        } catch (error) {
+            console.error('Error loading crypto wallets:', error);
+            // Use mock prices if API fails completely
+            livePrices = {
+                'BTC': 45000.00,
+                'ETH': 3000.00,
+                'LTC': 75.50,
+                'XRP': 0.65,
+                'BCH': 250.00,
+                'ADA': 0.45,
+                'USDT': 1.00
+            };
+            updateLivePrices();
+        }
+    }
+
+    function populateAccountDropdowns() {
+        const bankFromAccount = document.getElementById('bank-from-account');
+        const bankToAccount = document.getElementById('bank-to-account');
+        const fundingTargetAccount = document.getElementById('funding-target-account');
+        const sellTargetAccount = document.getElementById('sell-target-account');
+
+        // Clear and populate all dropdowns
+        [bankFromAccount, bankToAccount, fundingTargetAccount, sellTargetAccount].forEach(dropdown => {
+            dropdown.innerHTML = '<option value="">Select account</option>';
+        });
+
+        userAccounts.forEach(account => {
+            const option = `<option value="${account.account_number}" data-type="${account.account_type}">
+                ${account.account_type === 'checking' ? 'Checking' : 'Savings'} - ****${account.account_number.slice(-4)}
+            </option>`;
+            
+            bankFromAccount.innerHTML += option;
+            bankToAccount.innerHTML += option;
+            fundingTargetAccount.innerHTML += option;
+            sellTargetAccount.innerHTML += option;
+        });
+    }
+
+    function populateCryptoSelectors() {
+        const fundingSelector = document.getElementById('crypto-funding-selector');
+        const sellSelector = document.getElementById('sell-crypto-selector');
+
+        fundingSelector.innerHTML = '';
+        sellSelector.innerHTML = '';
+
+        // Use supported currencies from live prices
+        const supportedCurrencies = Object.keys(livePrices);
+
+        supportedCurrencies.forEach(currency => {
+            const wallet = cryptoWallets.find(w => w.currency === currency);
+            const balance = wallet ? wallet.balance : 0;
+
+            const cryptoOption = `
+                <div class="crypto-option" onclick="selectCryptoCurrency('${currency}', this)">
+                    <div class="crypto-symbol">${currency}</div>
+                    <div class="crypto-name">${getCryptoName(currency)}</div>
+                    <div style="font-size: 0.7rem; margin-top: 4px;">${balance.toFixed(8)}</div>
+                </div>
+            `;
+            
+            fundingSelector.innerHTML += cryptoOption;
+            sellSelector.innerHTML += cryptoOption;
+        });
+
+        // Select first crypto by default
+        if (supportedCurrencies.length > 0 && !selectedCryptoCurrency) {
+            selectedCryptoCurrency = supportedCurrencies[0];
+            const firstOption = fundingSelector.querySelector('.crypto-option');
+            if (firstOption) firstOption.classList.add('active');
+        }
+    }
+
+    function updateLivePrices() {
+        const pricesContainer = document.getElementById('live-prices');
+        pricesContainer.innerHTML = '';
+
+        Object.entries(livePrices).forEach(([currency, price]) => {
+            const priceItem = `
+                <div class="price-item">
+                    <div class="price-symbol">${currency}</div>
+                    <div class="price-value">$${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                    <div class="price-change">Live</div>
+                </div>
+            `;
+            pricesContainer.innerHTML += priceItem;
+        });
+
+        // Add last update time
+        const lastUpdate = document.createElement('div');
+        lastUpdate.style.cssText = 'text-align: center; font-size: 0.7rem; color: var(--gray); margin-top: 10px;';
+        lastUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+        lastUpdate.id = 'last-update-time';
+        
+        // Remove existing last update time if any
+        const existingUpdate = pricesContainer.querySelector('#last-update-time');
+        if (existingUpdate) {
+            existingUpdate.remove();
+        }
+        pricesContainer.appendChild(lastUpdate);
+    }
+
+    function getCryptoName(currency) {
+        const names = {
+            'BTC': 'Bitcoin',
+            'ETH': 'Ethereum', 
+            'LTC': 'Litecoin',
+            'XRP': 'Ripple',
+            'BCH': 'Bitcoin Cash',
+            'ADA': 'Cardano',
+            'USDT': 'Tether'
+        };
+        return names[currency] || currency;
+    }
+
+    function getCryptoNetwork(currency) {
+        const networks = {
+            'BTC': 'Bitcoin Network',
+            'ETH': 'Ethereum Network (ERC20)',
+            'LTC': 'Litecoin Network',
+            'XRP': 'Ripple Network (XRP)',
+            'BCH': 'Bitcoin Cash Network',
+            'ADA': 'Cardano Network',
+            'USDT': 'Ethereum Network (ERC20)'
+        };
+        return networks[currency] || `${currency} Network`;
+    }
+
+    function setupEventListeners() {
+        console.log('Setting up event listeners...');
+        
+        // Amount validation
+        document.getElementById('bank-amount').addEventListener('input', validateBankAmount);
+        document.getElementById('funding-usd-amount').addEventListener('input', validateFundingAmount);
+        document.getElementById('sell-crypto-amount').addEventListener('input', validateSellAmount);
+
+        // Add click handlers to buttons
+        document.getElementById('bank-deposit-btn').addEventListener('click', processBankDeposit);
+        document.getElementById('crypto-funding-btn').addEventListener('click', processCryptoFunding);
+        document.getElementById('sell-crypto-btn').addEventListener('click', processSellCrypto);
+
+        // Back button
+        document.querySelector('.back-button').addEventListener('click', goBack);
+    }
+
+    function switchDepositType(type) {
+        console.log('Switching to:', type);
+        currentDepositType = type;
+        
+        // Update tabs
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // Show/hide forms
+        document.getElementById('bank-form').style.display = type === 'bank' ? 'block' : 'none';
+        document.getElementById('crypto-funding-form').style.display = type === 'crypto-funding' ? 'block' : 'none';
+        document.getElementById('sell-crypto-form').style.display = type === 'sell-crypto' ? 'block' : 'none';
+
+        // Reset conversion info
+        document.getElementById('crypto-funding-conversion').style.display = 'none';
+        document.getElementById('crypto-funding-address').style.display = 'none';
+        document.getElementById('sell-conversion').style.display = 'none';
+    }
+
+    function selectCryptoCurrency(currency, element) {
+        console.log('Selected crypto:', currency);
+        selectedCryptoCurrency = currency;
+        
+        // Remove active class from all options in the current form
+        const form = element.closest('.deposit-form');
+        form.querySelectorAll('.crypto-option').forEach(opt => opt.classList.remove('active'));
+        
+        // Add active class to selected option
+        element.classList.add('active');
+
+        // Update conversion info
+        updateAllConversionInfo();
+    }
+
+    function updateAllConversionInfo() {
+        // Update crypto funding conversion
+        if (currentDepositType === 'crypto-funding') {
+            const usdAmount = document.getElementById('funding-usd-amount').value;
+            if (usdAmount && selectedCryptoCurrency) {
+                updateFundingConversion(parseFloat(usdAmount), selectedCryptoCurrency);
+            }
+        }
+        
+        // Update sell crypto conversion
+        if (currentDepositType === 'sell-crypto') {
+            const cryptoAmount = document.getElementById('sell-crypto-amount').value;
+            if (cryptoAmount && selectedCryptoCurrency) {
+                updateSellConversion(parseFloat(cryptoAmount), selectedCryptoCurrency);
+            }
+        }
+    }
+
+    function updateFundingConversion(usdAmount, currency) {
+        if (!livePrices[currency]) return;
+
+        const cryptoAmount = usdAmount / livePrices[currency];
+        const conversionInfo = document.getElementById('crypto-funding-conversion');
+        
+        conversionInfo.innerHTML = `
+            <div class="conversion-item">
+                <span>USD Amount:</span>
+                <span>$${usdAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            </div>
+            <div class="conversion-item">
+                <span>${currency} Amount:</span>
+                <span>${cryptoAmount.toFixed(8)} ${currency}</span>
+            </div>
+            <div class="conversion-item">
+                <span>Exchange Rate:</span>
+                <span>1 ${currency} = $${livePrices[currency].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            </div>
+        `;
+        conversionInfo.style.display = 'block';
+    }
+
+    function updateSellConversion(cryptoAmount, currency) {
+        if (!livePrices[currency]) return;
+
+        const usdAmount = cryptoAmount * livePrices[currency];
+        const conversionInfo = document.getElementById('sell-conversion');
+        
+        conversionInfo.innerHTML = `
+            <div class="conversion-item">
+                <span>${currency} Amount:</span>
+                <span>${cryptoAmount.toFixed(8)} ${currency}</span>
+            </div>
+            <div class="conversion-item">
+                <span>USD Amount:</span>
+                <span>$${usdAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            </div>
+            <div class="conversion-item">
+                <span>Exchange Rate:</span>
+                <span>1 ${currency} = $${livePrices[currency].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            </div>
+        `;
+        conversionInfo.style.display = 'block';
+    }
+
+    // VALIDATION FUNCTIONS
+    function validateBankAmount() {
+        const amount = parseFloat(document.getElementById('bank-amount').value);
+        hideError('bank_amount_error');
+
+        if (isNaN(amount) || amount <= 0) {
+            showError('bank_amount_error', 'Please enter a valid amount');
+            return false;
+        }
+        return true;
+    }
+
+    function validateFundingAmount() {
+        const amount = parseFloat(document.getElementById('funding-usd-amount').value);
+        hideError('funding_amount_error');
+
+        if (isNaN(amount) || amount <= 0) {
+            showError('funding_amount_error', 'Please enter a valid amount');
+            return false;
+        }
+
+        if (amount < 50) {
+            showError('funding_amount_error', 'Minimum deposit amount is $50');
+            return false;
+        }
+
+        // Update conversion info
+        if (selectedCryptoCurrency && amount > 0) {
+            updateFundingConversion(amount, selectedCryptoCurrency);
+        }
+
+        return true;
+    }
+
+    function validateSellAmount() {
+        const amount = parseFloat(document.getElementById('sell-crypto-amount').value);
+        hideError('sell_amount_error');
+
+        if (isNaN(amount) || amount <= 0) {
+            showError('sell_amount_error', 'Please enter a valid amount');
+            return false;
+        }
+
+        // Update conversion info
+        if (selectedCryptoCurrency && amount > 0) {
+            updateSellConversion(amount, selectedCryptoCurrency);
+        }
+
+        return true;
+    }
+
+    // PROCESSING FUNCTIONS
+    async function processBankDeposit() {
+        console.log('Processing bank deposit...');
+        if (!validateBankDeposit()) return;
+
+        const depositBtn = document.getElementById('bank-deposit-btn');
+        depositBtn.classList.add('loading');
+        depositBtn.disabled = true;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const fromAccount = document.getElementById('bank-from-account').value;
+            const toAccount = document.getElementById('bank-to-account').value;
+            const amount = parseFloat(document.getElementById('bank-amount').value);
+            const description = document.getElementById('bank-description').value || 'Bank deposit';
+
+            if (fromAccount === toAccount) {
+                throw new Error('Cannot deposit to the same account');
+            }
+
+            const depositData = {
+                from_account: fromAccount,
+                to_account: toAccount,
+                amount: amount,
+                description: description
+            };
+
+            console.log('Sending bank deposit:', depositData);
+
+            const response = await fetch(`${API_BASE}/transfer`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(depositData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showSuccessScreen(data, 'bank');
+            } else {
+                throw new Error(data.error || 'Deposit failed');
+            }
+
+        } catch (error) {
+            console.error('Deposit error:', error);
+            alert('Deposit failed: ' + error.message);
+        } finally {
+            depositBtn.classList.remove('loading');
+            depositBtn.disabled = false;
+        }
+    }
+
+    async function processCryptoFunding() {
+        if (isProcessing) {
+            console.log('⏳ Already processing request, please wait...');
+            return;
+        }
+        
+        isProcessing = true;
+        console.log('Processing crypto funding...');
+        if (!validateCryptoFunding()) {
+            isProcessing = false;
+            return;
+        }
+
+        const fundingBtn = document.getElementById('crypto-funding-btn');
+        fundingBtn.classList.add('loading');
+        fundingBtn.disabled = true;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const usdAmount = parseFloat(document.getElementById('funding-usd-amount').value);
+            const targetAccountSelect = document.getElementById('funding-target-account');
+            const targetAccount = targetAccountSelect.value;
+            const targetAccountType = targetAccountSelect.selectedOptions[0]?.dataset.type || 'checking';  // Extract account_type from data attribute
+            
+            if (!targetAccount) {
+                throw new Error('Please select a target account');
+            }
+
+            // Get the wallet address for the selected cryptocurrency
+            const wallet = cryptoWallets.find(w => w.currency === selectedCryptoCurrency);
+            if (!wallet) {
+                throw new Error(`No wallet found for ${selectedCryptoCurrency}`);
+            }
+
+            // Convert USD to crypto amount for the request (send crypto_amount as per backend expectation)
+            const cryptoAmount = usdAmount / livePrices[selectedCryptoCurrency];
+
+            const fundingData = {
+                currency: selectedCryptoCurrency,
+                crypto_amount: cryptoAmount,
+                account_type: targetAccountType  // NEW: Send account_type for storage in DB
+            };
+
+            console.log('Sending crypto funding request:', fundingData);
+
+            // Use the RequestCryptoFunding endpoint to create pending request
+            const response = await fetch(`${API_BASE}/crypto/request-funding`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(fundingData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Add wallet address and network to the response data
+                data.wallet_address = wallet.address;
+                data.network = getCryptoNetwork(selectedCryptoCurrency);
+                data.crypto_amount = cryptoAmount;
+                data.usd_amount = usdAmount;
+                data.account_type = targetAccountType;
+                showPendingRequestScreen(data);
+            } else {
+                throw new Error(data.error || 'Funding request failed');
+            }
+
+        } catch (error) {
+            console.error('Crypto funding error:', error);
+            alert('Crypto funding failed: ' + error.message);
+        } finally {
+            fundingBtn.classList.remove('loading');
+            fundingBtn.disabled = false;
+            isProcessing = false;
+        }
+    }
+
+    async function processSellCrypto() {
+        console.log('Processing crypto sell...');
+        if (!validateSellCrypto()) return;
+
+        const sellBtn = document.getElementById('sell-crypto-btn');
+        sellBtn.classList.add('loading');
+        sellBtn.disabled = true;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const cryptoAmount = parseFloat(document.getElementById('sell-crypto-amount').value);
+            const targetAccount = document.getElementById('sell-target-account').value;
+
+            if (!targetAccount) {
+                throw new Error('Please select a target account');
+            }
+
+            const sellData = {
+                currency: selectedCryptoCurrency,
+                amount: cryptoAmount
+            };
+
+            console.log('Sending crypto sell request:', sellData);
+
+            const response = await fetch(`${API_BASE}/crypto/sell`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(sellData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showSuccessScreen(data, 'sell-crypto');
+            } else {
+                throw new Error(data.error || 'Sell failed');
+            }
+
+        } catch (error) {
+            console.error('Sell crypto error:', error);
+            alert('Sell failed: ' + error.message);
+        } finally {
+            sellBtn.classList.remove('loading');
+            sellBtn.disabled = false;
+        }
+    }
+
+    // VALIDATION HELPERS
+    function validateBankDeposit() {
+        const fromAccount = document.getElementById('bank-from-account').value;
+        const toAccount = document.getElementById('bank-to-account').value;
+        const amountValid = validateBankAmount();
+
+        if (!fromAccount) {
+            alert('Please select a source account');
+            return false;
+        }
+
+        if (!toAccount) {
+            alert('Please select a destination account');
+            return false;
+        }
+
+        if (fromAccount === toAccount) {
+            alert('Cannot deposit to the same account');
+            return false;
+        }
+
+        return amountValid;
+    }
+
+    function validateCryptoFunding() {
+        const usdAmountValid = validateFundingAmount();
+        const targetAccount = document.getElementById('funding-target-account').value;
+
+        if (!selectedCryptoCurrency) {
+            alert('Please select a cryptocurrency');
+            return false;
+        }
+
+        if (!targetAccount) {
+            alert('Please select a target bank account');
+            return false;
+        }
+
+        return usdAmountValid;
+    }
+
+    function validateSellCrypto() {
+        const sellAmountValid = validateSellAmount();
+        const targetAccount = document.getElementById('sell-target-account').value;
+
+        if (!selectedCryptoCurrency) {
+            alert('Please select a cryptocurrency');
+            return false;
+        }
+
+        if (!targetAccount) {
+            alert('Please select a target bank account');
+            return false;
+        }
+
+        return sellAmountValid;
+    }
+
+    function showPendingRequestScreen(data) {
+        const depositScreen = document.getElementById('deposit-screen');
+        const successScreen = document.getElementById('success-screen');
+        const depositDetails = document.getElementById('deposit-details');
+        const successTitle = document.getElementById('success-title');
+        const successMessage = document.getElementById('success-message');
+
+        depositScreen.style.display = 'none';
+        successScreen.classList.add('active');
+
+        successTitle.textContent = 'Funding Request Submitted!';
+        successMessage.textContent = 'Send the exact crypto amount to the address below. Your funds will be credited after admin approval.';
+
+        const network = data.network || getCryptoNetwork(data.funding_details?.currency || selectedCryptoCurrency);
+        const walletAddress = data.wallet_address || data.funding_details?.to_crypto_address;
+        const cryptoAmount = data.crypto_amount || data.funding_details?.crypto_amount;
+        const currency = data.funding_details?.currency || selectedCryptoCurrency;
+        
+        depositDetails.innerHTML = `
+            <div class="detail-item">
+                <span class="detail-label">Request ID:</span>
+                <span class="detail-value">#${data.request_id}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Currency:</span>
+                <span class="detail-value">${currency}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Send Amount:</span>
+                <span class="detail-value">${cryptoAmount.toFixed(8)} ${currency}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">USD Value:</span>
+                <span class="detail-value">$${data.funding_details?.usd_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Target Account:</span>
+                <span class="detail-value">${data.account_type === 'checking' ? 'Checking' : 'Savings'}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Network:</span>
+                <span class="detail-value">${network}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Send To Address:</span>
+                <span class="detail-value" style="font-family: monospace; font-size: 0.8rem;">${walletAddress}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Status:</span>
+                <span class="detail-value" style="color: var(--accent);">${data.funding_details?.status || 'pending'}</span>
+            </div>
+            <div class="detail-item">
+                <button class="copy-button" onclick="copyToClipboard('${walletAddress}')" style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-copy"></i> Copy Wallet Address
+                </button>
+            </div>
+            <div style="background: var(--lighter); padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 0.8rem; color: var(--gray);">
+                <strong>Important:</strong> Send exactly ${cryptoAmount.toFixed(8)} ${currency} on the ${network}. 
+                Sending a different amount or using the wrong network may result in loss of funds.
+            </div>
+        `;
+    }
+
+    function showSuccessScreen(data, type) {
+        const depositScreen = document.getElementById('deposit-screen');
+        const successScreen = document.getElementById('success-screen');
+        const depositDetails = document.getElementById('deposit-details');
+        const successTitle = document.getElementById('success-title');
+        const successMessage = document.getElementById('success-message');
+
+        depositScreen.style.display = 'none';
+        successScreen.classList.add('active');
+
+        let detailsHTML = '';
+        
+        if (type === 'bank') {
+            successTitle.textContent = 'Deposit Successful!';
+            successMessage.textContent = 'Your funds have been transferred successfully between your accounts.';
+            
+            detailsHTML = `
+                <div class="detail-item">
+                    <span class="detail-label">From Account:</span>
+                    <span class="detail-value">****${data.transfer_details.from_account.slice(-4)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">To Account:</span>
+                    <span class="detail-value">****${data.transfer_details.to_account.slice(-4)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value">$${data.transfer_details.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                </div>
+            `;
+        } else if (type === 'sell-crypto') {
+            successTitle.textContent = 'Crypto Sold Successfully!';
+            successMessage.textContent = 'Your cryptocurrency has been sold and funds deposited to your bank account.';
+            
+            detailsHTML = `
+                <div class="detail-item">
+                    <span class="detail-label">Sold:</span>
+                    <span class="detail-value">${data.sold.toFixed(8)} ${data.currency}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Received:</span>
+                    <span class="detail-value">$${data.received_usd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">New Crypto Balance:</span>
+                    <span class="detail-value">${data.new_crypto_balance.toFixed(8)} ${data.currency}</span>
+                </div>
+            `;
+        }
+
+        depositDetails.innerHTML = detailsHTML;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Wallet address copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Wallet address copied to clipboard!');
+        });
+    }
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function goToDashboard() {
+        window.location.href = 'dashboard.html';
+    }
+
+    function makeAnotherDeposit() {
+        // Reset forms
+        document.getElementById('deposit-screen').style.display = 'block';
+        document.getElementById('success-screen').classList.remove('active');
+        
+        // Clear form fields
+        document.getElementById('bank-from-account').selectedIndex = 0;
+        document.getElementById('bank-to-account').selectedIndex = 0;
+        document.getElementById('bank-amount').value = '';
+        document.getElementById('bank-description').value = '';
+        document.getElementById('funding-usd-amount').value = '';
+        document.getElementById('funding-target-account').selectedIndex = 0;
+        document.getElementById('sell-crypto-amount').value = '';
+        document.getElementById('sell-target-account').selectedIndex = 0;
+        
+        // Reset conversion info
+        document.getElementById('crypto-funding-conversion').style.display = 'none';
+        document.getElementById('crypto-funding-address').style.display = 'none';
+        document.getElementById('sell-conversion').style.display = 'none';
+        
+        // Hide errors
+        hideAllErrors();
+    }
+
+    function showError(errorId, message) {
+        const errorElement = document.getElementById(errorId);
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+    }
+
+    function hideError(errorId) {
+        const errorElement = document.getElementById(errorId);
+        errorElement.classList.remove('show');
+    }
+
+    function hideAllErrors() {
+        document.querySelectorAll('.error-message').forEach(error => {
+            error.classList.remove('show');
+        });
+    }
+
+    function updateBankFromAccountBalance() {
+        // Implementation for updating balance display if needed
+        const selectedAccount = document.getElementById('bank-from-account').value;
+        const balanceElement = document.getElementById('bank-from-account-balance');
+        if (selectedAccount) {
+            const account = userAccounts.find(a => a.account_number === selectedAccount);
+            if (account) {
+                balanceElement.textContent = `Available: $${account.balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            }
+        } else {
+            balanceElement.textContent = '';
+        }
+    }
+</script>
+</body>
+</html>

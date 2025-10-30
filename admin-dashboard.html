@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NexaBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --lighter: #f1f5f9;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --error: #dc2626;
+            --success: #059669;
+            --warning: #f59e0b;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--white);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-role {
+            background: var(--accent);
+            color: var(--white);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .current-date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px 80px;
+        }
+
+        /* Admin Stats */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: -40px 0 25px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* Quick Actions */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--dark);
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .action-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .action-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--lighter);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .action-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Pending Requests */
+        .requests-section {
+            margin-bottom: 25px;
+        }
+
+        .request-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--warning);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .request-user {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .request-amount {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .request-details {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .btn-approve {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-reject {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .btn-view {
+            background: var(--lighter);
+            color: var(--dark);
+        }
+
+        /* Users List */
+        .users-section {
+            margin-bottom: 25px;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name-list {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .user-accounts {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* System Status */
+        .system-section {
+            margin-bottom: 25px;
+        }
+
+        .system-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--lighter);
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .status-value {
+            font-weight: 600;
+        }
+
+        .status-online {
+            color: var(--success);
+        }
+
+        .status-offline {
+            color: var(--error);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--lighter);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--lighter) 25%, rgba(255,255,255,0.5) 50%, var(--lighter) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-text {
+            height: 12px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-title {
+            height: 20px;
+            width: 60%;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .stat-number {
+                font-size: 1.5rem;
+            }
+            
+            .quick-actions-grid {
+                gap: 10px;
+            }
+            
+            .action-item {
+                padding: 12px 8px;
+            }
+            
+            .action-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Nexa<span>Bank</span> <span style="font-size: 0.9rem;">Admin</span></h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Loading...</div>
+                    <div class="user-role">ADMINISTRATOR</div>
+                    <div class="current-date" id="current-date"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Admin Stats -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-users">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pending-requests">0</div>
+                    <div class="stat-label">Pending Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-balance">$0</div>
+                    <div class="stat-label">Total Assets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="active-today">0</div>
+                    <div class="stat-label">Active Today</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h3 class="section-title">Admin Actions</h3>
+            <div class="quick-actions-grid">
+                <div class="action-item" onclick="navigateTo('users')">
+                    <div class="action-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="action-label">Manage Users</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('transactions')">
+                    <div class="action-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="action-label">Transactions</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('crypto-requests')">
+                    <div class="action-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="action-label">Crypto Funding</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('stocks')">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="action-label">Manage Stocks</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('reports')">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="action-label">Reports</div>
+                </div>
+                <div class="action-item" onclick="navigateTo('system')">
+                    <div class="action-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="action-label">System</div>
+                </div>
+                <div class="action-item" onclick="window.location.href = 'admin-edit.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="action-label">Adjust Balance</div>
+                </div>
+                <div class="action-item" onclick="logout()">
+                    <div class="action-icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <div class="action-label">Logout</div>
+                </div>
+            </div>
+
+            <!-- Pending Crypto Funding Requests -->
+            <div class="requests-section">
+                <h3 class="section-title">Pending Crypto Funding Requests</h3>
+                <div id="pending-requests-container">
+                    <div class="request-item">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                        <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Users -->
+            <div class="users-section">
+                <h3 class="section-title">Recent Users</h3>
+                <div id="recent-users-container">
+                    <div class="user-item">
+                        <div class="skeleton" style="width: 45px; height: 45px; border-radius: 50%;"></div>
+                        <div style="flex: 1; margin-left: 15px;">
+                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                            <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="system-section">
+                <h3 class="section-title">System Status</h3>
+                <div class="system-card">
+                    <div class="status-item">
+                        <div class="status-name">Database</div>
+                        <div class="status-value status-online" id="db-status">Online</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">API Server</div>
+                        <div class="status-value status-online" id="api-status">Online</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Crypto Service</div>
+                        <div class="status-value status-online" id="crypto-status">Online</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Stock Service</div>
+                        <div class="status-value status-online" id="stock-status">Online</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Dashboard</div>
+            </a>
+            <a href="#" class="nav-item" onclick="navigateTo('users')">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Users</div>
+            </a>
+            <a href="#" class="nav-item" onclick="navigateTo('transactions')">
+                <div class="nav-icon">💳</div>
+                <div class="nav-label">Transactions</div>
+            </a>
+            <a href="#" class="nav-item" onclick="navigateTo('crypto-requests')">
+                <div class="nav-icon">⏳</div>
+                <div class="nav-label">Pending</div>
+            </a>
+            <a href="#" class="nav-item" onclick="navigateTo('reports')">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Reports</div>
+            </a>
+        </nav>
+    </div>
+
+<script>
+    // API Base URL
+    const API_BASE = 'http://localhost:5000/api';
+
+    // Initialize admin dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 Admin Dashboard Starting...');
+        checkAdminAccess();
+        loadUserData();
+        updateCurrentDate();
+        loadAdminData();
+        checkSystemStatus();
+    });
+
+    function checkAdminAccess() {
+        const userData = JSON.parse(localStorage.getItem('nexabank_user') || '{}');
+        const token = localStorage.getItem('nexabank_token');
+        
+        console.log('🔐 Checking admin access:', { 
+            hasToken: !!token, 
+            isAdmin: userData.is_admin,
+            userData: userData 
+        });
+        
+        if (!token || !userData.is_admin) {
+            alert('Admin access required. Redirecting to login...');
+            window.location.href = 'login.html';
+            return;
+        }
+    }
+
+    function loadUserData() {
+        const userData = JSON.parse(localStorage.getItem('nexabank_user') || '{}');
+        const userName = userData.full_name || 'Admin User';
+        document.getElementById('user-name').textContent = userName;
+    }
+
+    function updateCurrentDate() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const formattedDate = now.toLocaleDateString('en-US', options);
+        document.getElementById('current-date').textContent = formattedDate;
+    }
+
+    async function loadAdminData() {
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            if (!token) {
+                console.error('❌ No token found');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+
+            console.log('🔍 Loading admin data...');
+
+            let usersData = { total_users: 0, users: [] };
+            let cryptoRequests = { total_pending: 0, pending_requests: [] };
+            let totalAssets = 0;
+
+            // Load users data
+            try {
+                const usersResponse = await fetch(`${API_BASE}/admin/users`, { headers });
+                console.log('👥 Users endpoint status:', usersResponse.status);
+                if (usersResponse.ok) {
+                    usersData = await usersResponse.json();
+                    console.log('✅ Users data loaded:', usersData);
+                    
+                    // Calculate total assets from user accounts
+                    if (usersData.users && usersData.users.length > 0) {
+                        for (const user of usersData.users) {
+                            try {
+                                const accountsResponse = await fetch(`${API_BASE}/admin/users/${user.user_id}/accounts`, { headers });
+                                if (accountsResponse.ok) {
+                                    const accountsData = await accountsResponse.json();
+                                    totalAssets += accountsData.total_balance || 0;
+                                }
+                            } catch (accountError) {
+                                console.error(`❌ Failed to get accounts for user ${user.user_id}:`, accountError);
+                            }
+                        }
+                    }
+                } else {
+                    console.error('❌ Users endpoint failed:', usersResponse.status);
+                }
+            } catch (usersError) {
+                console.error('💥 Users fetch failed:', usersError);
+            }
+
+            // Load crypto requests
+            try {
+                const cryptoResponse = await fetch(`${API_BASE}/admin/crypto-funding-requests`, { headers });
+                console.log('💰 Crypto requests endpoint status:', cryptoResponse.status);
+                if (cryptoResponse.ok) {
+                    cryptoRequests = await cryptoResponse.json();
+                    console.log('✅ Crypto requests data loaded:', cryptoRequests);
+                } else {
+                    console.error('❌ Crypto requests endpoint failed:', cryptoResponse.status);
+                }
+            } catch (cryptoError) {
+                console.error('💥 Crypto requests fetch failed:', cryptoError);
+            }
+
+            // Update dashboard with combined data
+            updateAdminStats(usersData, cryptoRequests, totalAssets);
+            updatePendingRequests(cryptoRequests);
+            updateRecentUsers(usersData);
+
+            console.log('🎉 Admin dashboard loaded successfully!');
+
+        } catch (error) {
+            console.error('💥 Admin dashboard loading error:', error);
+            showError('Failed to load admin data. Check console for details.');
+        }
+    }
+
+    function updateAdminStats(usersData, cryptoRequests, totalAssets = 0) {
+        console.log('📊 Updating admin stats with:', { 
+            users: usersData.total_users, 
+            pending: cryptoRequests.total_pending,
+            assets: totalAssets 
+        });
+        
+        // Update stats with real data
+        document.getElementById('total-users').textContent = usersData.total_users || '0';
+        document.getElementById('pending-requests').textContent = cryptoRequests.total_pending || '0';
+        document.getElementById('total-balance').textContent = `$${(totalAssets || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        
+        // Calculate active today (users created today)
+        const today = new Date().toDateString();
+        const activeToday = usersData.users ? usersData.users.filter(user => 
+            new Date(user.created_at).toDateString() === today
+        ).length : 0;
+        
+        document.getElementById('active-today').textContent = activeToday;
+    }
+
+    function updatePendingRequests(cryptoRequests) {
+        const container = document.getElementById('pending-requests-container');
+        
+        console.log('🔄 Updating pending requests:', cryptoRequests);
+        
+        if (!cryptoRequests.pending_requests || cryptoRequests.pending_requests.length === 0) {
+            container.innerHTML = '<div class="request-item" style="text-align: center; color: var(--gray); padding: 20px;">No pending crypto funding requests</div>';
+            return;
+        }
+
+        container.innerHTML = cryptoRequests.pending_requests.map(request => `
+            <div class="request-item">
+                <div class="request-header">
+                    <div class="request-user">${request.user_name || request.user_email}</div>
+                    <div class="request-amount">$${(request.usd_amount || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                </div>
+                <div class="request-details">
+                    ${(request.crypto_amount || 0).toFixed(8)} ${request.currency} • ${new Date(request.created_at).toLocaleDateString()}
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-approve" onclick="approveRequest(${request.request_id})">Approve</button>
+                    <button class="btn btn-reject" onclick="rejectRequest(${request.request_id})">Reject</button>
+                    <button class="btn btn-view" onclick="viewRequestDetails(${request.request_id})">View</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateRecentUsers(usersData) {
+        const container = document.getElementById('recent-users-container');
+        
+        console.log('🔄 Updating recent users:', usersData);
+        
+        if (!usersData.users || usersData.users.length === 0) {
+            container.innerHTML = '<div class="user-item" style="text-align: center; color: var(--gray); padding: 20px;">No users found</div>';
+            return;
+        }
+
+        // Get recent users (sorted by creation date, first 5)
+        const recentUsers = usersData.users
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            .slice(0, 5);
+        
+        container.innerHTML = recentUsers.map(user => {
+            const initials = user.full_name ? user.full_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UU';
+            const joinDate = new Date(user.created_at).toLocaleDateString();
+            
+            return `
+                <div class="user-item">
+                    <div class="user-avatar">${initials}</div>
+                    <div class="user-details">
+                        <div class="user-name-list">${user.full_name || 'Unknown User'}</div>
+                        <div class="user-email">${user.email}</div>
+                        <div class="user-accounts">Joined ${joinDate}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function approveRequest(requestId) {
+        if (!confirm('Are you sure you want to approve this funding request?')) return;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const response = await fetch(`${API_BASE}/admin/approve-crypto-funding`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    request_id: requestId,
+                    admin_notes: 'Approved via admin dashboard'
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert('✅ Request approved successfully!');
+                console.log('Approval result:', result);
+                loadAdminData(); // Refresh data
+            } else {
+                const error = await response.json();
+                alert('❌ Failed to approve request: ' + (error.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Approval error:', error);
+            alert('❌ Failed to approve request. Please try again.');
+        }
+    }
+
+    async function rejectRequest(requestId) {
+        if (!confirm('Are you sure you want to reject this funding request?')) return;
+
+        try {
+            const token = localStorage.getItem('nexabank_token');
+            const response = await fetch(`${API_BASE}/admin/reject-crypto-funding`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    request_id: requestId,
+                    admin_notes: 'Rejected via admin dashboard'
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert('✅ Request rejected successfully!');
+                console.log('Rejection result:', result);
+                loadAdminData(); // Refresh data
+            } else {
+                const error = await response.json();
+                alert('❌ Failed to reject request: ' + (error.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Rejection error:', error);
+            alert('❌ Failed to reject request. Please try again.');
+        }
+    }
+
+    function viewRequestDetails(requestId) {
+        // Show detailed view in a modal or alert
+        alert(`Viewing details for request #${requestId}\n\nThis would show:\n- User details\n- Transaction history\n- Risk assessment\n- Previous requests`);
+        
+        // In a real app, you would:
+        // 1. Fetch detailed request info
+        // 2. Show a modal with all details
+        // 3. Include user history and risk scoring
+    }
+
+    function checkSystemStatus() {
+        console.log('🔧 Checking system status...');
+        
+        // Check API server
+        fetch(`${API_BASE}/`)
+            .then(response => {
+                const isOnline = response.ok;
+                console.log('🌐 API Server status:', isOnline ? 'Online' : 'Offline');
+                document.getElementById('api-status').textContent = isOnline ? 'Online' : 'Offline';
+                document.getElementById('api-status').className = `status-value ${isOnline ? 'status-online' : 'status-offline'}`;
+                
+                if (isOnline) {
+                    // If API is online, check other services
+                    checkDatabaseStatus();
+                    checkCryptoStatus();
+                    checkStockStatus();
+                }
+            })
+            .catch(error => {
+                console.error('🌐 API Server check failed:', error);
+                document.getElementById('api-status').textContent = 'Offline';
+                document.getElementById('api-status').className = 'status-value status-offline';
+            });
+    }
+
+    async function checkDatabaseStatus() {
+        try {
+            const response = await fetch(`${API_BASE}/test-db`);
+            const isOnline = response.ok;
+            console.log('🗄️ Database status:', isOnline ? 'Online' : 'Offline');
+            document.getElementById('db-status').textContent = isOnline ? 'Online' : 'Offline';
+            document.getElementById('db-status').className = `status-value ${isOnline ? 'status-online' : 'status-offline'}`;
+        } catch (error) {
+            console.error('🗄️ Database check failed:', error);
+            document.getElementById('db-status').textContent = 'Offline';
+            document.getElementById('db-status').className = 'status-value status-offline';
+        }
+    }
+
+    function checkCryptoStatus() {
+        // For now, assume crypto service is online if API is online
+        // You might want to add a specific crypto health check endpoint
+        document.getElementById('crypto-status').textContent = 'Online';
+        document.getElementById('crypto-status').className = 'status-value status-online';
+    }
+
+    function checkStockStatus() {
+        // For now, assume stock service is online if API is online
+        // You might want to add a specific stock health check endpoint
+        document.getElementById('stock-status').textContent = 'Online';
+        document.getElementById('stock-status').className = 'status-value status-online';
+    }
+
+    function showError(message) {
+        console.error('❌ Dashboard Error:', message);
+        // Show user-friendly error message
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--error);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+        `;
+        errorDiv.textContent = message;
+        document.body.appendChild(errorDiv);
+        
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
+    }
+
+    function navigateTo(destination) {
+        // For now, show alert. In real app, navigate to different pages
+        const pages = {
+            'users': 'User Management',
+            'transactions': 'Transaction Monitoring',
+            'crypto-requests': 'Crypto Funding Requests',
+            'stocks': 'Stock Management',
+            'reports': 'Reports & Analytics',
+            'system': 'System Settings',
+            'adjust-balance': 'Balance Adjustment'
+        };
+        
+        alert(`Navigating to ${pages[destination] || destination}...`);
+        
+        // In a real SPA, you would:
+        // 1. Hide current content
+        // 2. Show the selected section
+        // 3. Update URL
+        // 4. Load section-specific data
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('nexabank_token');
+            localStorage.removeItem('nexabank_user');
+            window.location.href = 'login.html';
+        }
+    }
+
+    // Auto-refresh data every 30 seconds
+    setInterval(loadAdminData, 30000);
+
+    // Manual refresh function (could be called from a refresh button)
+    function refreshData() {
+        console.log('🔄 Manual refresh triggered');
+        loadAdminData();
+        checkSystemStatus();
+    }
+</script>
+</body>
+</html>`
